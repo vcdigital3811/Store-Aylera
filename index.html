@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AYLERA</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  html, body { margin: 0; padding: 0; }
+  #root { min-height: 100vh; }
+
+  .ledger-app {
+    --ink: #1F3327;
+    --ink-2: #16241C;
+    --paper: #F6EFDD;
+    --paper-2: #ECE1C4;
+    --brass: #C89B3C;
+    --rust: #B5482A;
+    --charcoal: #2A2420;
+    --sage: #7A9C80;
+    font-family: 'Work Sans', sans-serif;
+    background: radial-gradient(ellipse at top, var(--ink) 0%, var(--ink-2) 100%);
+    color: var(--paper);
+    min-height: 100vh;
+    padding: 28px 18px 60px;
+    box-sizing: border-box;
+  }
+  .ledger-app * { box-sizing: border-box; }
+
+  .shop-header { text-align: center; margin-bottom: 30px; position: relative; }
+  .shop-title {
+    font-family: 'Fraunces', serif; font-weight: 700; font-size: 34px;
+    letter-spacing: 0.06em; color: var(--paper); margin: 0;
+  }
+  .shop-title::after {
+    content: ''; display: block; width: 64px; height: 2px;
+    background: var(--brass); margin: 10px auto 0;
+  }
+  .shop-tagline {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--sage); margin-top: 10px;
+  }
+  .profile-row { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--brass); margin-top: 12px; }
+  .profile-row button {
+    background: none; border: none; color: var(--sage); text-decoration: underline;
+    cursor: pointer; font-family: inherit; font-size: 11px; margin-left: 6px; padding: 0;
+  }
+  .my-messages-btn {
+    position: absolute; right: 0; top: 0;
+    background: none; border: 1px solid var(--brass); color: var(--brass);
+    border-radius: 20px; padding: 6px 12px; font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 5px;
+  }
+  .my-messages-btn:hover { background: var(--brass); color: var(--ink-2); }
+
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+    gap: 22px; max-width: 720px; margin: 0 auto;
+  }
+
+  .tag-card {
+    position: relative; background: var(--paper); border: none; border-radius: 3px;
+    padding: 22px 14px 16px; cursor: pointer; box-shadow: 3px 4px 0 rgba(0,0,0,0.25);
+    transform: rotate(var(--tilt)); transition: transform 0.18s ease, box-shadow 0.18s ease;
+    text-align: center; font-family: 'Work Sans', sans-serif;
+  }
+  .tag-card:hover { transform: rotate(0deg) translateY(-4px); box-shadow: 4px 7px 0 rgba(0,0,0,0.3); }
+  .tag-card:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+  .tag-hole {
+    position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 10px; height: 10px; border-radius: 50%; background: var(--ink-2); border: 2px solid var(--brass);
+  }
+  .tag-code {
+    position: absolute; top: 10px; right: 10px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--rust); letter-spacing: 0.05em;
+  }
+  .tag-emoji { display: block; font-size: 34px; margin: 10px 0 8px; }
+  .tag-name {
+    display: block; font-family: 'Fraunces', serif; font-weight: 600; font-size: 15px;
+    color: var(--charcoal); margin-bottom: 4px;
+  }
+  .tag-price { display: block; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--ink); }
+
+  .panel {
+    max-width: 480px; margin: 0 auto; background: var(--paper); color: var(--charcoal);
+    border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    overflow: hidden; min-height: 420px; display: flex; flex-direction: column;
+  }
+
+  .detail-panel { padding: 18px 22px 24px; position: relative; text-align: center; }
+  .detail-close { position: absolute; top: 14px; left: 14px; }
+  .detail-code { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--rust); margin-top: 30px; }
+  .detail-emoji { font-size: 56px; margin: 10px 0; }
+  .detail-name { font-family: 'Fraunces', serif; font-size: 24px; margin: 0 0 4px; }
+  .detail-price { font-family: 'IBM Plex Mono', monospace; font-size: 17px; color: var(--ink); margin-bottom: 12px; }
+  .detail-blurb { font-size: 14px; line-height: 1.5; color: #4a4238; margin: 0 0 20px; }
+
+  .buy-form { display: flex; flex-direction: column; gap: 10px; text-align: left; }
+  .buy-form-label {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--sage); margin-bottom: 2px;
+  }
+  .text-input, .pin-input, .chat-input {
+    font-family: 'Work Sans', sans-serif; font-size: 14px; padding: 10px 12px;
+    border: 1.5px solid #d8cba9; border-radius: 5px; background: #fffdf7; color: var(--charcoal);
+  }
+  .text-input:focus, .pin-input:focus, .chat-input:focus { outline: none; border-color: var(--brass); }
+
+  .stamp-btn {
+    font-family: 'IBM Plex Mono', monospace; font-size: 13px; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--rust); background: transparent;
+    border: 2px solid var(--rust); border-radius: 5px; padding: 10px 16px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .stamp-btn:hover:not(:disabled) { background: var(--rust); color: var(--paper); }
+  .stamp-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .icon-btn {
+    background: none; border: none; color: var(--charcoal); cursor: pointer;
+    padding: 6px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  }
+  .icon-btn:hover { background: rgba(0,0,0,0.06); }
+
+  .chat-panel, .list-panel, .pin-panel { min-height: 480px; }
+  .chat-header {
+    display: flex; align-items: center; gap: 10px; padding: 14px 16px;
+    border-bottom: 1px solid #e2d6b3; background: var(--paper-2);
+  }
+  .chat-title { font-family: 'Fraunces', serif; font-weight: 600; font-size: 16px; }
+  .chat-subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #7a6e57; }
+
+  .chat-body { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .chat-empty {
+    margin: auto; text-align: center; font-size: 13px; color: #8a7d63; max-width: 260px;
+    font-family: 'Work Sans', sans-serif;
+  }
+  .bubble-row { display: flex; }
+  .bubble-row.mine { justify-content: flex-end; }
+  .bubble-row.theirs { justify-content: flex-start; }
+  .bubble { max-width: 78%; padding: 9px 12px; border-radius: 10px; font-size: 13.5px; line-height: 1.4; }
+  .bubble-row.mine .bubble { background: var(--rust); color: var(--paper); border-bottom-right-radius: 2px; }
+  .bubble-row.theirs .bubble { background: var(--paper-2); color: var(--charcoal); border-bottom-left-radius: 2px; }
+  .bubble-time { font-family: 'IBM Plex Mono', monospace; font-size: 9px; opacity: 0.65; margin-top: 3px; text-align: right; }
+
+  .chat-input-row { display: flex; gap: 8px; padding: 12px; border-top: 1px solid #e2d6b3; background: var(--paper-2); }
+  .chat-input { flex: 1; }
+  .send-btn {
+    background: var(--ink); color: var(--paper); border: none; border-radius: 50%;
+    width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0;
+  }
+  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .send-btn:hover:not(:disabled) { background: var(--rust); }
+
+  .list-body { flex: 1; overflow-y: auto; padding: 8px 0; }
+  .convo-row {
+    width: 100%; display: flex; justify-content: space-between; align-items: center;
+    gap: 10px; padding: 12px 18px; background: none; border: none; border-bottom: 1px solid #ece1c4;
+    cursor: pointer; text-align: left; font-family: 'Work Sans', sans-serif;
+  }
+  .convo-row:hover { background: #fbf6e8; }
+  .convo-main { min-width: 0; }
+  .convo-name { font-weight: 600; font-size: 13.5px; color: var(--charcoal); }
+  .convo-sub { font-weight: 400; color: #8a7d63; font-size: 11px; }
+  .convo-last { font-size: 12px; color: #8a7d63; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
+  .convo-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
+  .convo-time { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #a89a78; }
+  .unread-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--brass); }
+
+  .pin-panel { align-items: center; justify-content: center; text-align: center; padding: 30px; position: relative; }
+  .pin-icon { color: var(--brass); margin-bottom: 6px; }
+  .pin-title { font-family: 'Fraunces', serif; font-size: 20px; margin-bottom: 4px; }
+  .pin-subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #8a7d63; margin-bottom: 18px; }
+  .pin-form { display: flex; gap: 8px; align-items: center; }
+  .pin-input { width: 100px; text-align: center; letter-spacing: 6px; font-family: 'IBM Plex Mono', monospace; }
+  .pin-error { color: var(--rust); font-size: 11px; margin-top: 10px; font-family: 'IBM Plex Mono', monospace; }
+  .shake { animation: shake 0.3s; }
+  @keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+
+  .footer-row { text-align: center; margin-top: 36px; }
+  .seller-link {
+    background: none; border: none; color: var(--sage); font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; opacity: 0.85;
+  }
+  .seller-link:hover { opacity: 1; color: var(--brass); }
+  a.seller-link { text-decoration: none; }
+  .footer-divider { color: var(--sage); opacity: 0.5; margin: 0 8px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+  .seller-badge {
+    background: var(--brass); color: var(--ink-2); border-radius: 50%; width: 16px; height: 16px;
+    font-size: 9px; display: inline-flex; align-items: center; justify-content: center; font-weight: 600;
+  }
+
+  @media (prefers-reduced-motion: reduce) { .tag-card, .shake { transition: none; animation: none; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+/* ---------------------------------------------------------
+   ICONS — small inline SVGs (no external icon package needed)
+--------------------------------------------------------- */
+function IconBase({ size = 18, children, ...props }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      {children}
+    </svg>
+  );
+}
+function ArrowLeft(props) {
+  return <IconBase {...props}><line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" /></IconBase>;
+}
+function Send(props) {
+  return <IconBase {...props}><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></IconBase>;
+}
+function Lock(props) {
+  return <IconBase {...props}><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></IconBase>;
+}
+function MessageCircle(props) {
+  return <IconBase {...props}><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" /></IconBase>;
+}
+function Check(props) {
+  return <IconBase {...props}><polyline points="20 6 9 17 4 12" /></IconBase>;
+}
+function Inbox(props) {
+  return <IconBase {...props}><polyline points="22 12 16 12 14 15 10 15 8 12 2 12" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></IconBase>;
+}
+
+/* ---------------------------------------------------------
+   DATA — edit names, prices, and blurbs here.
+   Add a real "image" (url) field later to swap out the emoji.
+--------------------------------------------------------- */
+const SHOP_NAME = "AYLERA";
+const SHOP_TAGLINE = "five things, made with care";
+const SELLER_PIN = "2109"; // change this string anytime
+const CONTACT_EMAIL = "amayrashah22.in@gmail.com";
+
+const PRODUCTS = [
+  { id: "travel-book", code: "001", emoji: "📚", name: "Travel Book", price: 630, blurb: "A pocket companion for planning, journaling, and wandering." },
+  { id: "art-works", code: "002", emoji: "🎨", name: "Art Works", price: 1010, blurb: "Original small-batch art pieces, made by hand." },
+  { id: "rush-it", code: "003", emoji: "🎲", name: "Rush It", price: 820, blurb: "A fast dice game built for quick thinking under pressure." },
+  { id: "chocolate", code: "004", emoji: "🍫", name: "Chocolate", price: 750, blurb: "Small-batch chocolate, made fresh in short runs." },
+  { id: "journaling-kit", code: "005", emoji: "📔", name: "Journaling Kit", price: 880, blurb: "Everything you need to start, and keep, a journaling habit." },
+];
+
+/* ---------------------------------------------------------
+   STORAGE HELPERS — localStorage version.
+   IMPORTANT: localStorage is per browser / per device. A buyer
+   and the seller will only see the same conversation if they
+   open this page in the SAME browser (e.g. you testing it
+   yourself). For real cross-device buyer <-> seller chat, this
+   would need a real backend (Firebase, Supabase, etc).
+--------------------------------------------------------- */
+function loadIndex() {
+  try {
+    const raw = localStorage.getItem("conv-index");
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+function saveIndex(list) {
+  try {
+    localStorage.setItem("conv-index", JSON.stringify(list));
+  } catch (e) {
+    console.error("Storage error (index):", e);
+  }
+}
+function loadConv(id) {
+  try {
+    const raw = localStorage.getItem("conv:" + id);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    return null;
+  }
+}
+function saveConv(conv) {
+  try {
+    localStorage.setItem("conv:" + conv.id, JSON.stringify(conv));
+  } catch (e) {
+    console.error("Storage error (conv):", e);
+  }
+}
+function loadBuyerProfile() {
+  try {
+    const raw = localStorage.getItem("buyer-profile");
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    return null;
+  }
+}
+function saveBuyerProfile(p) {
+  try {
+    localStorage.setItem("buyer-profile", JSON.stringify(p));
+  } catch (e) {
+    console.error("Storage error (profile):", e);
+  }
+}
+function clearBuyerProfile() {
+  try {
+    localStorage.removeItem("buyer-profile");
+  } catch (e) {
+    /* nothing to clear */
+  }
+}
+
+function slugEmail(email) {
+  return email.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+function makeConvId(email, productId) {
+  return productId + "__" + slugEmail(email);
+}
+async function refreshIndexEntry(conv) {
+  let idx = await loadIndex();
+  const i = idx.findIndex((c) => c.id === conv.id);
+  const summary = {
+    id: conv.id,
+    productId: conv.productId,
+    productName: conv.productName,
+    buyerName: conv.buyerName,
+    buyerEmail: conv.buyerEmail,
+    lastMessage: conv.messages.length ? conv.messages[conv.messages.length - 1].text : "",
+    updatedAt: conv.updatedAt,
+    sellerUnread: conv.sellerUnread,
+  };
+  if (i >= 0) idx[i] = summary;
+  else idx.push(summary);
+  idx.sort((a, b) => b.updatedAt - a.updatedAt);
+  await saveIndex(idx);
+  return idx;
+}
+async function sendMessage(convId, sender, text, productMeta, buyerMeta) {
+  let conv = await loadConv(convId);
+  const now = Date.now();
+  if (!conv) {
+    conv = {
+      id: convId,
+      productId: productMeta.id,
+      productName: productMeta.name,
+      buyerName: buyerMeta.name,
+      buyerEmail: buyerMeta.email,
+      messages: [],
+      createdAt: now,
+      updatedAt: now,
+      buyerUnread: false,
+      sellerUnread: false,
+    };
+  }
+  conv.messages.push({ sender, text, ts: now });
+  conv.updatedAt = now;
+  if (sender === "buyer") conv.sellerUnread = true;
+  else conv.buyerUnread = true;
+  await saveConv(conv);
+  await refreshIndexEntry(conv);
+  return conv;
+}
+
+function formatINR(n) {
+  return "₹" + n.toLocaleString("en-IN");
+}
+function timeAgo(ts) {
+  const diff = Date.now() - ts;
+  const min = Math.floor(diff / 60000);
+  if (min < 1) return "just now";
+  if (min < 60) return min + "m ago";
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return hr + "h ago";
+  const day = Math.floor(hr / 24);
+  if (day < 7) return day + "d ago";
+  return new Date(ts).toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+}
+
+/* ---------------------------------------------------------
+   CHAT THREAD — shared by buyer view and seller view
+--------------------------------------------------------- */
+function ChatThread({ convId, role, title, subtitle, onBack, productMeta, buyerMeta }) {
+  const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [text, setText] = useState("");
+  const [sending, setSending] = useState(false);
+  const bottomRef = useRef(null);
+  const pollRef = useRef(null);
+
+  useEffect(() => {
+    let mounted = true;
+    async function init() {
+      setLoading(true);
+      const conv = await loadConv(convId);
+      if (mounted) {
+        setMessages(conv ? conv.messages : []);
+        setLoading(false);
+      }
+      if (conv) {
+        if (role === "seller" && conv.sellerUnread) {
+          conv.sellerUnread = false;
+          await saveConv(conv);
+          await refreshIndexEntry(conv);
+        }
+        if (role === "buyer" && conv.buyerUnread) {
+          conv.buyerUnread = false;
+          await saveConv(conv);
+          await refreshIndexEntry(conv);
+        }
+      }
+    }
+    init();
+    pollRef.current = setInterval(async () => {
+      const conv = await loadConv(convId);
+      if (conv && mounted) {
+        setMessages((prev) => (conv.messages.length !== prev.length ? conv.messages : prev));
+      }
+    }, 4000);
+    return () => {
+      mounted = false;
+      clearInterval(pollRef.current);
+    };
+  }, [convId, role]);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  async function handleSend() {
+    const trimmed = text.trim();
+    if (!trimmed || sending) return;
+    setSending(true);
+    setText("");
+    const conv = await sendMessage(convId, role, trimmed, productMeta, buyerMeta);
+    setMessages(conv.messages);
+    setSending(false);
+  }
+
+  return (
+    <div className="panel chat-panel">
+      <div className="chat-header">
+        <button className="icon-btn" onClick={onBack} aria-label="Back">
+          <ArrowLeft size={18} />
+        </button>
+        <div className="chat-header-text">
+          <div className="chat-title">{title}</div>
+          {subtitle && <div className="chat-subtitle">{subtitle}</div>}
+        </div>
+      </div>
+
+      <div className="chat-body">
+        {loading ? (
+          <div className="chat-empty">Loading conversation…</div>
+        ) : messages.length === 0 ? (
+          <div className="chat-empty">
+            No messages yet. Say hello to {role === "seller" ? "the buyer" : "the seller"} to start.
+          </div>
+        ) : (
+          messages.map((m, i) => (
+            <div key={i} className={"bubble-row " + (m.sender === role ? "mine" : "theirs")}>
+              <div className="bubble">
+                <div className="bubble-text">{m.text}</div>
+                <div className="bubble-time">{timeAgo(m.ts)}</div>
+              </div>
+            </div>
+          ))
+        )}
+        <div ref={bottomRef} />
+      </div>
+
+      <div className="chat-input-row">
+        <input
+          className="chat-input"
+          placeholder="Type a message…"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleSend();
+          }}
+        />
+        <button className="send-btn" onClick={handleSend} disabled={sending || !text.trim()} aria-label="Send">
+          <Send size={16} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------
+   PRODUCT CARD
+--------------------------------------------------------- */
+function ProductCard({ product, index, onClick }) {
+  const tilt = ((index % 3) - 1) * 0.7;
+  return (
+    <button className="tag-card" style={{ "--tilt": tilt + "deg" }} onClick={onClick}>
+      <span className="tag-hole" />
+      <span className="tag-code">NO. {product.code}</span>
+      <span className="tag-emoji">{product.emoji}</span>
+      <span className="tag-name">{product.name}</span>
+      <span className="tag-price">{formatINR(product.price)}</span>
+    </button>
+  );
+}
+
+/* ---------------------------------------------------------
+   PRODUCT DETAIL + BUY FLOW
+--------------------------------------------------------- */
+function ProductDetail({ product, buyerProfile, setBuyerProfile, onClose }) {
+  const [form, setForm] = useState({ name: "", email: "" });
+  const [convId, setConvId] = useState(null);
+
+  useEffect(() => {
+    if (buyerProfile) setForm(buyerProfile);
+  }, [buyerProfile]);
+
+  async function startChat() {
+    if (!form.name.trim() || !form.email.trim()) return;
+    await saveBuyerProfile(form);
+    setBuyerProfile(form);
+    setConvId(makeConvId(form.email, product.id));
+  }
+
+  if (convId) {
+    return (
+      <ChatThread
+        convId={convId}
+        role="buyer"
+        title={product.name}
+        subtitle={"Chat with the seller · " + formatINR(product.price)}
+        onBack={onClose}
+        productMeta={{ id: product.id, name: product.name }}
+        buyerMeta={form}
+      />
+    );
+  }
+
+  return (
+    <div className="panel detail-panel">
+      <button className="icon-btn detail-close" onClick={onClose} aria-label="Close">
+        <ArrowLeft size={18} />
+      </button>
+      <div className="detail-code">NO. {product.code}</div>
+      <div className="detail-emoji">{product.emoji}</div>
+      <h2 className="detail-name">{product.name}</h2>
+      <div className="detail-price">{formatINR(product.price)}</div>
+      <p className="detail-blurb">{product.blurb}</p>
+
+      <div className="buy-form">
+        <div className="buy-form-label">Message the seller to buy this</div>
+        <input
+          className="text-input"
+          placeholder="Your name"
+          value={form.name}
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
+        />
+        <input
+          className="text-input"
+          type="email"
+          placeholder="Your email"
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") startChat();
+          }}
+        />
+        <button
+          type="button"
+          className="stamp-btn"
+          onClick={startChat}
+          disabled={!form.name.trim() || !form.email.trim()}
+        >
+          <MessageCircle size={15} /> Start chat
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------
+   MY MESSAGES — buyer's own threads across products
+--------------------------------------------------------- */
+function MyMessages({ buyerProfile, onOpenConv, onBack }) {
+  const [convos, setConvos] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+    async function load() {
+      const idx = await loadIndex();
+      if (mounted) {
+        setConvos(idx.filter((c) => c.buyerEmail === buyerProfile.email).sort((a, b) => b.updatedAt - a.updatedAt));
+        setLoading(false);
+      }
+    }
+    load();
+    const t = setInterval(load, 5000);
+    return () => {
+      mounted = false;
+      clearInterval(t);
+    };
+  }, [buyerProfile]);
+
+  return (
+    <div className="panel list-panel">
+      <div className="chat-header">
+        <button className="icon-btn" onClick={onBack} aria-label="Back">
+          <ArrowLeft size={18} />
+        </button>
+        <div className="chat-header-text">
+          <div className="chat-title">My messages</div>
+        </div>
+      </div>
+      <div className="list-body">
+        {loading ? (
+          <div className="chat-empty">Loading…</div>
+        ) : convos.length === 0 ? (
+          <div className="chat-empty">No chats yet. Tap a product and message the seller to start one.</div>
+        ) : (
+          convos.map((c) => (
+            <button key={c.id} className="convo-row" onClick={() => onOpenConv(c)}>
+              <div className="convo-main">
+                <div className="convo-name">{c.productName}</div>
+                <div className="convo-last">{c.lastMessage}</div>
+              </div>
+              <div className="convo-meta">
+                <span className="convo-time">{timeAgo(c.updatedAt)}</span>
+                {c.buyerUnread && <span className="unread-dot" />}
+              </div>
+            </button>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------
+   SELLER PANEL — PIN gate + inbox
+--------------------------------------------------------- */
+function SellerPanel({ onExit }) {
+  const [unlocked, setUnlocked] = useState(false);
+  const [pin, setPin] = useState("");
+  const [error, setError] = useState(false);
+  const [convos, setConvos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [active, setActive] = useState(null);
+
+  useEffect(() => {
+    if (!unlocked) return;
+    let mounted = true;
+    async function load() {
+      const idx = await loadIndex();
+      if (mounted) {
+        setConvos(idx.sort((a, b) => b.updatedAt - a.updatedAt));
+        setLoading(false);
+      }
+    }
+    load();
+    const t = setInterval(load, 5000);
+    return () => {
+      mounted = false;
+      clearInterval(t);
+    };
+  }, [unlocked]);
+
+  function tryUnlock() {
+    if (pin === SELLER_PIN) {
+      setUnlocked(true);
+      setError(false);
+    } else {
+      setError(true);
+      setPin("");
+    }
+  }
+
+  if (!unlocked) {
+    return (
+      <div className="panel pin-panel">
+        <button className="icon-btn detail-close" onClick={onExit} aria-label="Close">
+          <ArrowLeft size={18} />
+        </button>
+        <Lock size={22} className="pin-icon" />
+        <div className="pin-title">Seller ledger</div>
+        <div className="pin-subtitle">Enter your code to see buyer chats</div>
+        <div className={"pin-form " + (error ? "shake" : "")}>
+          <input
+            className="pin-input"
+            value={pin}
+            onChange={(e) => {
+              setPin(e.target.value.replace(/\D/g, "").slice(0, 4));
+              setError(false);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") tryUnlock();
+            }}
+            inputMode="numeric"
+            placeholder="••••"
+            autoFocus
+          />
+          <button type="button" className="stamp-btn" onClick={tryUnlock}>
+            <Check size={15} /> Unlock
+          </button>
+        </div>
+        {error && <div className="pin-error">Wrong code. Try again.</div>}
+      </div>
+    );
+  }
+
+  if (active) {
+    return (
+      <ChatThread
+        convId={active.id}
+        role="seller"
+        title={active.buyerName}
+        subtitle={active.productName + " · " + active.buyerEmail}
+        onBack={() => setActive(null)}
+        productMeta={{ id: active.productId, name: active.productName }}
+        buyerMeta={{ name: active.buyerName, email: active.buyerEmail }}
+      />
+    );
+  }
+
+  return (
+    <div className="panel list-panel">
+      <div className="chat-header">
+        <button className="icon-btn" onClick={onExit} aria-label="Back">
+          <ArrowLeft size={18} />
+        </button>
+        <div className="chat-header-text">
+          <div className="chat-title">Seller ledger</div>
+          <div className="chat-subtitle">All buyer conversations</div>
+        </div>
+      </div>
+      <div className="list-body">
+        {loading ? (
+          <div className="chat-empty">Loading…</div>
+        ) : convos.length === 0 ? (
+          <div className="chat-empty">No conversations yet.</div>
+        ) : (
+          convos.map((c) => (
+            <button key={c.id} className="convo-row" onClick={() => setActive(c)}>
+              <div className="convo-main">
+                <div className="convo-name">
+                  {c.buyerName} <span className="convo-sub">· {c.productName}</span>
+                </div>
+                <div className="convo-last">{c.lastMessage}</div>
+              </div>
+              <div className="convo-meta">
+                <span className="convo-time">{timeAgo(c.updatedAt)}</span>
+                {c.sellerUnread && <span className="unread-dot" />}
+              </div>
+            </button>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------
+   APP
+--------------------------------------------------------- */
+function App() {
+  const [view, setView] = useState("shop"); // shop | product | seller | myMessages
+  const [selected, setSelected] = useState(null);
+  const [buyerProfile, setBuyerProfile] = useState(null);
+  const [unreadBadge, setUnreadBadge] = useState(0);
+
+  useEffect(() => {
+    setBuyerProfile(loadBuyerProfile());
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+    async function poll() {
+      const idx = await loadIndex();
+      if (mounted) setUnreadBadge(idx.filter((c) => c.sellerUnread).length);
+    }
+    poll();
+    const t = setInterval(poll, 8000);
+    return () => {
+      mounted = false;
+      clearInterval(t);
+    };
+  }, []);
+
+  async function handleForget() {
+    await clearBuyerProfile();
+    setBuyerProfile(null);
+  }
+
+  return (
+    <div className="ledger-app">
+      {view === "shop" && (
+        <>
+          <div className="shop-header">
+            {buyerProfile && (
+              <button className="my-messages-btn" onClick={() => setView("myMessages")}>
+                <Inbox size={13} /> My messages
+              </button>
+            )}
+            <h1 className="shop-title">{SHOP_NAME}</h1>
+            <div className="shop-tagline">{SHOP_TAGLINE}</div>
+            {buyerProfile && (
+              <div className="profile-row">
+                signed in as {buyerProfile.name}
+                <button onClick={handleForget}>not you?</button>
+              </div>
+            )}
+          </div>
+
+          <div className="grid">
+            {PRODUCTS.map((p, i) => (
+              <ProductCard
+                key={p.id}
+                product={p}
+                index={i}
+                onClick={() => {
+                  setSelected(p);
+                  setView("product");
+                }}
+              />
+            ))}
+          </div>
+
+          <div className="footer-row">
+            <button className="seller-link" onClick={() => setView("seller")}>
+              <Lock size={12} /> Seller ledger
+              {unreadBadge > 0 && <span className="seller-badge">{unreadBadge}</span>}
+            </button>
+            <span className="footer-divider">·</span>
+            <a className="seller-link" href={"mailto:" + CONTACT_EMAIL}>
+              Mail us
+            </a>
+          </div>
+        </>
+      )}
+
+      {view === "product" && selected && (
+        <ProductDetail
+          product={selected}
+          buyerProfile={buyerProfile}
+          setBuyerProfile={setBuyerProfile}
+          onClose={() => setView("shop")}
+        />
+      )}
+
+      {view === "myMessages" && buyerProfile && (
+        <MyMessages
+          buyerProfile={buyerProfile}
+          onBack={() => setView("shop")}
+          onOpenConv={(c) => {
+            setSelected(PRODUCTS.find((p) => p.id === c.productId) || { id: c.productId, name: c.productName, price: 0, blurb: "", code: "", emoji: "🛍️" });
+            setView("product");
+          }}
+        />
+      )}
+
+      {view === "seller" && <SellerPanel onExit={() => setView("shop")} />}
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+</script>
+</body>
+</html>
