@@ -829,7 +829,15 @@ const PRODUCTS = [
     function Seller({ onBack }) {
       const [pin, setPin] = useState('');
       const [unlocked, setUnlocked] = useState(false);
-      const orders = read('aylera-orders', []);
+      const [orders, setOrders] = useState([]);
+      
+      useEffect(() => {  
+        async function loadSellerOrders() {
+          const data = await loadOrders();
+          setOrders(data);
+        }
+        if (unlocked) loadSellerOrders();
+      }, [unlocked]);
 
       if (!unlocked) {
         return (
