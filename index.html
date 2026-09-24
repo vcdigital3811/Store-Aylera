@@ -681,7 +681,14 @@ const PRODUCTS = [
         <div className="panel cart-panel">
           <button className="close" onClick={onBack}>←</button>
           <h2 className="section-title">Your cart</h2>
-
+          try {
+  await saveOrder(order);
+  await saveSharedCart([]);
+  onComplete(order);
+} catch (error) {
+  setError('Could not submit the order. Please try again.');
+  console.error(error);
+}
           {!cart.length ? (
             <div className="empty">Your cart is empty.<br />Choose something lovely from the shop.</div>
           ) : (
@@ -723,33 +730,36 @@ const PRODUCTS = [
       const [error, setError] = useState('');
       const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-      function submit(e) {
-        e.preventDefault();
+      async function submit(e) {
+  e.preventDefault();
 
-        if (!form.fullName.trim() || !form.email.trim() || !form.phone.trim() || !form.address.trim()) {
-          setError('Please complete your full name, email, phone number, and address.');
-          return;
-        }
+  if (!form.fullName.trim() || !form.email.trim() || !form.phone.trim() || !form.address.trim()) {
+    setError('Please complete your full name, email, phone number, and address.');
+    return;
+  }
 
-        if (!/^\S+@\S+\.\S+$/.test(form.email)) {
-          setError('Please enter a valid email address.');
-          return;
-        }
+  if (!/^\S+@\S+\.\S+$/.test(form.email)) {
+    setError('Please enter a valid email address.');
+    return;
+  }
 
-        const order = {
-          id: 'AY-' + Date.now().toString().slice(-7),
-          items: cart,
-          customer: form,
-          total,
-          createdAt: Date.now()
-        };
+  const order = {
+    id: 'AY-' + Date.now().toString().slice(-7),
+    items: cart,
+    customer: form,
+    total,
+    createdAt: Date.now()
+  };
 
-        const orders = read('aylera-orders', []);
-        write('aylera-orders', [order, ...orders]);
-        write('aylera-cart', []);
-        onComplete(order);
-      }
-
+  try {
+    await saveOrder(order);
+    await saveSharedCart([]);
+    onComplete(order);
+  } catch (error) {
+    setError('Could not submit the order. Please try again.');
+    console.error(error);
+  }
+}
       return (
         <div className="panel checkout-panel">
           <button className="close" onClick={onBack}>←</button>
