@@ -877,12 +877,22 @@ const PRODUCTS = [
     function App() {
       const [view, setView] = useState('shop');
       const [selected, setSelected] = useState(null);
-      const [cart, setCart] = useState(() => read('aylera-cart', []));
+      const [cart, setCart] = useState([]);
       const [lastOrder, setLastOrder] = useState(null);
 
-      useEffect(() => {
-        write('aylera-cart', cart);
-      }, [cart]);
+useEffect(() => {
+  async function initCart() {
+    const shared = await loadSharedCart();
+    setCart(shared);
+  }
+  initCart();
+}, []);
+
+useEffect(() => {
+  if (cart) {
+    saveSharedCart(cart);
+  }
+}, [cart]);
 
       function addToCart(item) {
         const key = item.id + (item.customization ? JSON.stringify(item.customization) : '');
