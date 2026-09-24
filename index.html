@@ -30,510 +30,118 @@
       button, input, textarea { font: inherit; }
       #root { min-height: 100vh; }
 
-      .app-shell {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 30px 18px 60px;
-      }
-
-      .topbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 28px;
-      }
-
+      .app-shell { max-width: 1200px; margin: 0 auto; padding: 30px 18px 60px; }
+      .topbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 28px; }
       .brand {
-        font-family: 'Fraunces', serif;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        font-size: clamp(2rem, 4vw, 3.2rem);
-        margin: 0;
-        color: var(--paper);
+        font-family: 'Fraunces', serif; letter-spacing: 0.1em; text-transform: uppercase;
+        font-size: clamp(2rem, 4vw, 3.2rem); margin: 0; color: var(--paper);
       }
-
-      .top-actions {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
-      }
-
-      .ghost-btn, .primary-btn, .small-btn, .danger-btn {
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.18s ease;
-      }
-
+      .top-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+      .ghost-btn, .primary-btn, .small-btn, .danger-btn { border-radius: 8px; cursor: pointer; transition: all 0.18s ease; }
       .ghost-btn {
-        background: transparent;
-        border: 1px solid var(--brass);
-        color: var(--paper);
-        padding: 10px 16px;
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 11px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
+        background: transparent; border: 1px solid var(--brass); color: var(--paper);
+        padding: 10px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+        letter-spacing: 0.06em; text-transform: uppercase;
       }
-
       .ghost-btn:hover { background: rgba(200, 155, 60, 0.12); }
-
       .primary-btn {
-        background: var(--brass);
-        color: var(--ink-2);
-        border: none;
-        padding: 11px 18px;
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 11px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        font-weight: 600;
+        background: var(--brass); color: var(--ink-2); border: none; padding: 11px 18px;
+        font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.06em;
+        text-transform: uppercase; font-weight: 600;
       }
-
       .primary-btn:hover { filter: brightness(1.05); }
-
       .small-btn {
-        border: 1px solid var(--rust);
-        background: transparent;
-        color: var(--rust);
-        padding: 8px 12px;
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 10px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
+        border: 1px solid var(--rust); background: transparent; color: var(--rust);
+        padding: 8px 12px; font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+        letter-spacing: 0.06em; text-transform: uppercase;
       }
-
       .small-btn:hover { background: rgba(181, 72, 42, 0.08); }
 
-      .danger-btn {
-        border: 1px solid var(--rust);
-        background: var(--rust);
-        color: #fff;
-        padding: 8px 12px;
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 10px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-      }
-
-      .shop-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 24px;
-      }
-
+      .shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 24px; }
       .product-card {
-        background: var(--paper);
-        color: var(--charcoal);
-        border: none;
-        border-radius: 10px;
-        box-shadow: 4px 6px 0 rgba(0,0,0,0.22);
-        padding: 16px;
-        text-align: left;
-        cursor: pointer;
-        transform: rotate(var(--tilt, 0deg));
-        transition: transform 0.18s ease, box-shadow 0.18s ease;
+        background: var(--paper); color: var(--charcoal); border: none; border-radius: 10px;
+        box-shadow: 4px 6px 0 rgba(0,0,0,0.22); padding: 16px; text-align: left; cursor: pointer;
+        transform: rotate(var(--tilt, 0deg)); transition: transform 0.18s ease, box-shadow 0.18s ease;
       }
-
-      .product-card:hover {
-        transform: translateY(-4px) rotate(0deg);
-        box-shadow: 6px 10px 0 rgba(0,0,0,0.28);
-      }
-
-      .product-image {
-        width: 100%;
-        height: 180px;
-        border-radius: 8px;
-        object-fit: cover;
-        display: block;
-        background: #f0ebdf;
-      }
-
-      .product-name {
-        margin: 14px 0 6px;
-        font-family: 'Fraunces', serif;
-        font-size: 1.4rem;
-      }
-
-      .product-price {
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 0.82rem;
-        color: var(--ink);
-        margin-bottom: 12px;
-      }
-
-      .card-actions {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
-
-      .card-actions .primary-btn,
-      .card-actions .small-btn {
-        flex: 1;
-      }
+      .product-card:hover { transform: translateY(-4px) rotate(0deg); box-shadow: 6px 10px 0 rgba(0,0,0,0.28); }
+      .product-image { width: 100%; height: 180px; border-radius: 8px; object-fit: cover; display: block; background: #f0ebdf; }
+      .product-name { margin: 14px 0 6px; font-family: 'Fraunces', serif; font-size: 1.4rem; }
+      .product-price { font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; color: var(--ink); margin-bottom: 12px; }
+      .card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+      .card-actions .primary-btn, .card-actions .small-btn { flex: 1; }
 
       .panel {
-        max-width: 960px;
-        margin: 0 auto;
-        background: var(--paper);
-        color: var(--charcoal);
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.24);
+        max-width: 960px; margin: 0 auto; background: var(--paper); color: var(--charcoal);
+        border-radius: 12px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.24);
       }
-
-      .product-detail {
-        display: grid;
-        grid-template-columns: minmax(260px, 360px) minmax(320px, 1fr);
-        gap: 30px;
-        padding: 24px;
+      .product-detail { display: grid; grid-template-columns: minmax(260px, 360px) minmax(320px, 1fr); gap: 30px; padding: 24px; }
+      .detail-image { width: 100%; height: 100%; min-height: 360px; border-radius: 12px; object-fit: cover; background: #f5f1e7; }
+      .detail-right { display: flex; flex-direction: column; gap: 16px; }
+      .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--sage); }
+      .detail-name { font-family: 'Fraunces', serif; font-size: clamp(2rem, 4vw, 2.8rem); margin: 0; }
+      .detail-price { font-family: 'IBM Plex Mono', monospace; font-size: 1.1rem; color: var(--ink); }
+      .detail-blurb { margin: 0; line-height: 1.6; color: #4a4038; }
+      .detail-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+      .detail-actions .primary-btn, .detail-actions .small-btn { min-width: 180px; }
+      .custom-form { margin-top: 10px; display: grid; gap: 12px; }
+      .field-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--sage); }
+      .input, textarea {
+        width: 100%; background: #fffdf9; border: 1.5px solid #d8cba9; border-radius: 8px;
+        padding: 12px 14px; color: var(--charcoal); font-size: 0.98rem;
       }
-
-      .detail-image {
-        width: 100%;
-        height: 100%;
-        min-height: 360px;
-        border-radius: 12px;
-        object-fit: cover;
-        background: #f5f1e7;
-      }
-
-      .detail-right {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      .eyebrow {
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: var(--sage);
-      }
-
-      .detail-name {
-        font-family: 'Fraunces', serif;
-        font-size: clamp(2rem, 4vw, 2.8rem);
-        margin: 0;
-      }
-
-      .detail-price {
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 1.1rem;
-        color: var(--ink);
-      }
-
-      .detail-blurb {
-        margin: 0;
-        line-height: 1.6;
-        color: #4a4038;
-      }
-
-      .detail-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      .detail-actions .primary-btn,
-      .detail-actions .small-btn {
-        min-width: 180px;
-      }
-
-      .custom-form {
-        margin-top: 10px;
-        display: grid;
-        gap: 12px;
-      }
-
-      .field-label {
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.07em;
-        color: var(--sage);
-      }
-
-      .input,
-      textarea {
-        width: 100%;
-        background: #fffdf9;
-        border: 1.5px solid #d8cba9;
-        border-radius: 8px;
-        padding: 12px 14px;
-        color: var(--charcoal);
-        font-size: 0.98rem;
-      }
-
       textarea { min-height: 90px; resize: vertical; }
       .input:focus, textarea:focus { outline: 2px solid rgba(200,155,60,0.25); border-color: var(--brass); }
 
-      .cart-wrap, .checkout-wrap, .seller-wrap {
-        max-width: 980px;
-        margin: 0 auto;
-      }
-
-      .section-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 16px;
-        margin-bottom: 16px;
-      }
-
-      .section-title {
-        font-family: 'Fraunces', serif;
-        font-size: clamp(1.8rem, 3vw, 2.5rem);
-        margin: 0;
-      }
-
-      .cart-items {
-        display: grid;
-        gap: 14px;
-      }
-
+      .cart-wrap, .checkout-wrap, .seller-wrap { max-width: 980px; margin: 0 auto; }
+      .section-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 16px; }
+      .section-title { font-family: 'Fraunces', serif; font-size: clamp(1.8rem, 3vw, 2.5rem); margin: 0; }
+      .cart-items { display: grid; gap: 14px; }
       .cart-item {
-        display: grid;
-        grid-template-columns: 90px 1fr auto;
-        gap: 16px;
-        align-items: center;
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.12);
-        border-radius: 12px;
-        padding: 12px;
+        display: grid; grid-template-columns: 90px 1fr auto; gap: 16px; align-items: center;
+        background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 12px;
       }
-
-      .cart-item img {
-        width: 90px;
-        height: 90px;
-        object-fit: cover;
-        border-radius: 10px;
-        background: #f0ebdf;
-      }
-
-      .cart-item h4 {
-        margin: 0 0 6px;
-        font-family: 'Fraunces', serif;
-        font-size: 1.25rem;
-      }
-
-      .cart-meta {
-        color: var(--paper-2);
-        font-size: 0.92rem;
-      }
-
-      .qty-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .qty-button {
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        border: 1px solid var(--brass);
-        background: transparent;
-        color: var(--paper);
-        cursor: pointer;
-      }
-
-      .qty-value {
-        min-width: 24px;
-        text-align: center;
-        font-family: 'IBM Plex Mono', monospace;
-      }
-
+      .cart-item img { width: 90px; height: 90px; object-fit: cover; border-radius: 10px; background: #f0ebdf; }
+      .cart-item h4 { margin: 0 0 6px; font-family: 'Fraunces', serif; font-size: 1.25rem; }
+      .cart-meta { color: var(--paper-2); font-size: 0.92rem; }
+      .qty-row { display: flex; align-items: center; gap: 8px; }
+      .qty-button { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--brass); background: transparent; color: var(--paper); cursor: pointer; }
+      .qty-value { min-width: 24px; text-align: center; font-family: 'IBM Plex Mono', monospace; }
       .cart-summary {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 20px;
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.12);
-        border-radius: 12px;
-        padding: 18px 20px;
-        margin-top: 18px;
+        display: flex; justify-content: space-between; align-items: center; gap: 20px;
+        background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 12px; padding: 18px 20px; margin-top: 18px;
       }
-
-      .total-label {
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 11px;
-        color: var(--sage);
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-      }
-
-      .total-value {
-        font-family: 'Fraunces', serif;
-        font-size: 2rem;
-      }
-
-      .checkout-form {
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.12);
-        border-radius: 12px;
-        padding: 22px;
-      }
-
-      .form-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 18px;
-      }
-
+      .total-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--sage); text-transform: uppercase; letter-spacing: 0.06em; }
+      .total-value { font-family: 'Fraunces', serif; font-size: 2rem; }
+      .checkout-form { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 22px; }
+      .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
       .field.full { grid-column: 1 / -1; }
-
       .seller-pin-box {
-        max-width: 540px;
-        margin: 40px auto 0;
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.12);
-        border-radius: 16px;
-        padding: 32px 22px;
-        text-align: center;
+        max-width: 540px; margin: 40px auto 0; background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 32px 22px; text-align: center;
       }
-
-      .lock-icon {
-        display: inline-flex;
-        width: 52px;
-        height: 52px;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        background: rgba(200,155,60,0.12);
-        color: var(--brass);
-        font-size: 1.7rem;
-        margin-bottom: 12px;
-      }
-
-      .pin-row {
-        display: flex;
-        gap: 12px;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        margin-top: 18px;
-      }
-
-      .pin-input {
-        width: 120px;
-        text-align: center;
-        letter-spacing: 0.3em;
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 1.2rem;
-      }
-
-      .seller-orders-list {
-        display: grid;
-        gap: 12px;
-      }
-
-      .order-card {
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.12);
-        border-radius: 12px;
-        padding: 16px 18px;
-        cursor: pointer;
-        color: var(--paper);
-      }
-
+      .lock-icon { display: inline-flex; width: 52px; height: 52px; align-items: center; justify-content: center; border-radius: 50%; background: rgba(200,155,60,0.12); color: var(--brass); font-size: 1.7rem; margin-bottom: 12px; }
+      .pin-row { display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap; margin-top: 18px; }
+      .pin-input { width: 120px; text-align: center; letter-spacing: 0.3em; font-family: 'IBM Plex Mono', monospace; font-size: 1.2rem; }
+      .seller-orders-list { display: grid; gap: 12px; }
+      .order-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 16px 18px; cursor: pointer; color: var(--paper); }
       .order-card:hover { background: rgba(255,255,255,0.07); }
-
-      .order-topline {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 16px;
-        margin-bottom: 8px;
-      }
-
-      .order-name {
-        font-family: 'Fraunces', serif;
-        font-size: 1.3rem;
-      }
-
+      .order-topline { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 8px; }
+      .order-name { font-family: 'Fraunces', serif; font-size: 1.3rem; }
       .order-status {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 10px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        padding: 6px 10px;
-        border-radius: 999px;
+        display: inline-flex; align-items: center; gap: 8px; font-family: 'IBM Plex Mono', monospace;
+        font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 6px 10px; border-radius: 999px;
       }
-
-      .pending {
-        background: rgba(200,155,60,0.18);
-        color: #f9d88a;
-      }
-
-      .completed {
-        background: rgba(122,156,128,0.18);
-        color: #cfe0cd;
-      }
-
-      .order-meta {
-        display: flex;
-        justify-content: space-between;
-        gap: 10px;
-        color: var(--paper-2);
-        font-size: 0.9rem;
-      }
-
-      .order-panel {
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.12);
-        border-radius: 12px;
-        padding: 20px;
-      }
-
-      .order-rows {
-        display: grid;
-        gap: 10px;
-      }
-
-      .order-row {
-        display: flex;
-        justify-content: space-between;
-        gap: 20px;
-        padding-bottom: 8px;
-        border-bottom: 1px solid rgba(255,255,255,0.08);
-      }
-
+      .pending { background: rgba(200,155,60,0.18); color: #f9d88a; }
+      .completed { background: rgba(122,156,128,0.18); color: #cfe0cd; }
+      .order-meta { display: flex; justify-content: space-between; gap: 10px; color: var(--paper-2); font-size: 0.9rem; }
+      .order-panel { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 20px; }
+      .order-rows { display: grid; gap: 10px; }
+      .order-row { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.08); }
       .order-row:last-child { border-bottom: none; }
-
-      .muted {
-        color: var(--muted);
-      }
-
-      .empty-box {
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.12);
-        border-radius: 12px;
-        padding: 28px 20px;
-        color: var(--paper-2);
-        text-align: center;
-      }
-
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 999px;
-        min-width: 18px;
-        height: 18px;
-        padding: 0 6px;
-        font-size: 10px;
-        background: var(--brass);
-        color: var(--ink-2);
-        font-family: 'IBM Plex Mono', monospace;
-      }
+      .muted { color: var(--muted); }
+      .empty-box { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 28px 20px; color: var(--paper-2); text-align: center; }
+      .badge { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; min-width: 18px; height: 18px; padding: 0 6px; font-size: 10px; background: var(--brass); color: var(--ink-2); font-family: 'IBM Plex Mono', monospace; }
 
       @media (max-width: 760px) {
         .product-detail { grid-template-columns: 1fr; }
@@ -573,54 +181,17 @@
         return '₹' + Number(value).toLocaleString('en-IN');
       }
 
-      function loadCart() {
-        try {
-          const raw = localStorage.getItem(CART_KEY);
-          return raw ? JSON.parse(raw) : [];
-        } catch {
-          return [];
-        }
-      }
-
-      function saveCart(items) {
-        try {
-          localStorage.setItem(CART_KEY, JSON.stringify(items));
-        } catch (e) {
-          console.warn('Could not save cart', e);
-        }
-      }
-
-      function loadOrders() {
-        try {
-          const raw = localStorage.getItem(ORDER_KEY);
-          return raw ? JSON.parse(raw) : [];
-        } catch {
-          return [];
-        }
-      }
-
-      function saveOrders(orders) {
-        try {
-          localStorage.setItem(ORDER_KEY, JSON.stringify(orders));
-        } catch (e) {
-          console.warn('Could not save orders', e);
-        }
-      }
-
-      function createOrderId() {
-        return 'AYL-' + Date.now().toString(36).toUpperCase();
-      }
+      function loadCart() { try { const raw = localStorage.getItem(CART_KEY); return raw ? JSON.parse(raw) : []; } catch { return []; } }
+      function saveCart(items) { try { localStorage.setItem(CART_KEY, JSON.stringify(items)); } catch (e) { console.warn('Could not save cart', e); } }
+      function loadOrders() { try { const raw = localStorage.getItem(ORDER_KEY); return raw ? JSON.parse(raw) : []; } catch { return []; } }
+      function saveOrders(orders) { try { localStorage.setItem(ORDER_KEY, JSON.stringify(orders)); } catch (e) { console.warn('Could not save orders', e); } }
+      function createOrderId() { return 'AYL-' + Date.now().toString(36).toUpperCase(); }
 
       function App() {
         const [view, setView] = React.useState('shop');
         const [selectedProduct, setSelectedProduct] = React.useState(null);
         const [cart, setCart] = React.useState(loadCart());
-        const [checkoutForm, setCheckoutForm] = React.useState({
-          fullName: '',
-          email: '',
-          phone: '',
-          address: ''
-        });
+        const [checkoutForm, setCheckoutForm] = React.useState({ fullName: '', email: '', phone: '', address: '' });
         const [customText, setCustomText] = React.useState('');
         const [customImage, setCustomImage] = React.useState('');
         const [orders, setOrders] = React.useState(loadOrders());
@@ -635,21 +206,11 @@
         const pendingOrders = orders.filter((order) => order.status === 'pending').length;
 
         function addToCart(product) {
-          const cartItem = {
-            id: product.id + '-' + Date.now(),
-            productId: product.id,
-            name: product.name,
-            price: product.price,
-            image: product.image,
-            quantity: 1,
-            customization: customText || customImage ? {
-              text: customText,
-              image: customImage
-            } : null
-          };
+          const customMeta = customText || customImage ? { text: customText, image: customImage } : null;
+          const cartItem = { id: product.id + '-' + Date.now(), productId: product.id, name: product.name, price: product.price, image: product.image, quantity: 1, customization: customMeta };
 
           setCart((prev) => {
-            const existing = prev.find((item) => item.productId === product.id && JSON.stringify(item.customization || null) === JSON.stringify(cartItem.customization || null));
+            const existing = prev.find((item) => item.productId === product.id && JSON.stringify(item.customization || null) === JSON.stringify(customMeta));
             if (existing) {
               return prev.map((item) => item.id === existing.id ? { ...item, quantity: item.quantity + 1 } : item);
             }
@@ -673,10 +234,7 @@
         }
 
         function placeOrder() {
-          if (!checkoutForm.fullName.trim() || !checkoutForm.email.trim() || !checkoutForm.phone.trim() || !checkoutForm.address.trim()) {
-            return;
-          }
-
+          if (!checkoutForm.fullName.trim() || !checkoutForm.email.trim() || !checkoutForm.phone.trim() || !checkoutForm.address.trim()) return;
           const order = {
             id: createOrderId(),
             createdAt: Date.now(),
@@ -698,10 +256,7 @@
         }
 
         function toggleOrderStatus(orderId) {
-          setOrders((prev) => prev.map((order) => {
-            if (order.id !== orderId) return order;
-            return { ...order, status: order.status === 'pending' ? 'completed' : 'pending' };
-          }));
+          setOrders((prev) => prev.map((order) => order.id !== orderId ? order : { ...order, status: order.status === 'pending' ? 'completed' : 'pending' }));
         }
 
         function handleUnlockSeller() {
@@ -734,7 +289,7 @@
                     {product.customizable ? (
                       <button className="small-btn" onClick={() => { setSelectedProduct(product); setView('product'); }}>Customize</button>
                     ) : (
-                      <button className="primary-btn" onClick={() => { addToCart(product); }}>Add to cart</button>
+                      <button className="primary-btn" onClick={() => addToCart(product)}>Add to cart</button>
                     )}
                   </div>
                 </div>
@@ -745,7 +300,7 @@
 
         const renderProductDetail = () => {
           if (!selectedProduct) return null;
-          const isCustom = selectedProduct.customizable;
+          const isCustom = !!selectedProduct.customizable;
 
           return (
             <div className="panel product-detail">
@@ -756,17 +311,12 @@
                 <div className="detail-price">{formatINR(selectedProduct.price)}</div>
                 <p className="detail-blurb">{selectedProduct.blurb}</p>
 
-                {isCustom ? (
+                {isCustom && (
                   <div className="custom-form">
                     <div>
                       <div className="field-label">Customization details</div>
-                      <textarea
-                        value={customText}
-                        onChange={(e) => setCustomText(e.target.value)}
-                        placeholder="Add your custom text, name, color, size, or design notes..."
-                      />
+                      <textarea value={customText} onChange={(e) => setCustomText(e.target.value)} placeholder="Add your custom text, name, color, size, or design notes..." />
                     </div>
-
                     <div>
                       <div className="field-label">Upload reference image</div>
                       <input
@@ -782,23 +332,12 @@
                         }}
                       />
                     </div>
-
-                    {customImage && (
-                      <img src={customImage} alt="custom preview" style={{ maxHeight: 180, width: 'auto', borderRadius: 10, objectFit: 'cover' }} />
-                    )}
+                    {customImage && <img src={customImage} alt="custom preview" style={{ maxHeight: 180, width: 'auto', borderRadius: 10, objectFit: 'cover' }} />}
                   </div>
-                ) : null}
+                )}
 
                 <div className="detail-actions">
-                  <button className="primary-btn" onClick={() => {
-                    if (isCustom) {
-                      addToCart(selectedProduct);
-                    } else {
-                      addToCart(selectedProduct);
-                    }
-                  }}>
-                    {isCustom ? 'Add customized item' : 'Add to cart'}
-                  </button>
+                  <button className="primary-btn" onClick={() => addToCart(selectedProduct)}>{isCustom ? 'Add customized item' : 'Add to cart'}</button>
                   <button className="small-btn" onClick={() => { setSelectedProduct(null); setCustomText(''); setCustomImage(''); setView('shop'); }}>Back</button>
                 </div>
               </div>
@@ -859,25 +398,10 @@
 
             <div className="checkout-form">
               <div className="form-grid">
-                <div className="field full">
-                  <div className="field-label">Full name</div>
-                  <input className="input" value={checkoutForm.fullName} onChange={(e) => setCheckoutForm({ ...checkoutForm, fullName: e.target.value })} placeholder="Enter full name" />
-                </div>
-
-                <div className="field">
-                  <div className="field-label">Email</div>
-                  <input className="input" type="email" value={checkoutForm.email} onChange={(e) => setCheckoutForm({ ...checkoutForm, email: e.target.value })} placeholder="Enter email" />
-                </div>
-
-                <div className="field">
-                  <div className="field-label">Phone number</div>
-                  <input className="input" type="tel" value={checkoutForm.phone} onChange={(e) => setCheckoutForm({ ...checkoutForm, phone: e.target.value })} placeholder="Enter phone number" />
-                </div>
-
-                <div className="field full">
-                  <div className="field-label">Address</div>
-                  <textarea value={checkoutForm.address} onChange={(e) => setCheckoutForm({ ...checkoutForm, address: e.target.value })} placeholder="Street, city, state, country, postal code" />
-                </div>
+                <div className="field full"><div className="field-label">Full name</div><input className="input" value={checkoutForm.fullName} onChange={(e) => setCheckoutForm({ ...checkoutForm, fullName: e.target.value })} placeholder="Enter full name" /></div>
+                <div className="field"><div className="field-label">Email</div><input className="input" type="email" value={checkoutForm.email} onChange={(e) => setCheckoutForm({ ...checkoutForm, email: e.target.value })} placeholder="Enter email" /></div>
+                <div className="field"><div className="field-label">Phone number</div><input className="input" type="tel" value={checkoutForm.phone} onChange={(e) => setCheckoutForm({ ...checkoutForm, phone: e.target.value })} placeholder="Enter phone number" /></div>
+                <div className="field full"><div className="field-label">Address</div><textarea value={checkoutForm.address} onChange={(e) => setCheckoutForm({ ...checkoutForm, address: e.target.value })} placeholder="Street, city, state, country, postal code" /></div>
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, marginTop: 20, flexWrap: 'wrap' }}>
@@ -900,14 +424,7 @@
                   <h2 className="section-title" style={{ marginBottom: 8 }}>Seller ledger</h2>
                   <div className="muted">Enter your code to access the order list</div>
                   <div className="pin-row">
-                    <input
-                      className="input pin-input"
-                      type="password"
-                      inputMode="numeric"
-                      value={sellerPin}
-                      onChange={(e) => setSellerPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
-                      placeholder="••••"
-                    />
+                    <input className="input pin-input" type="password" inputMode="numeric" value={sellerPin} onChange={(e) => setSellerPin(e.target.value.replace(/\D/g, '').slice(0, 4))} placeholder="••••" />
                     <button className="primary-btn" onClick={handleUnlockSeller}>Unlock</button>
                   </div>
                 </div>
@@ -941,10 +458,7 @@
                     <h3 style={{ margin: '0 0 10px', fontFamily: 'Fraunces, serif' }}>Items</h3>
                     {selectedOrder.items.map((item) => (
                       <div key={item.id} className="order-row" style={{ padding: '10px 0' }}>
-                        <span>
-                          {item.name} × {item.quantity}
-                          {item.customization && item.customization.text ? <div className="muted">Custom: {item.customization.text}</div> : null}
-                        </span>
+                        <span>{item.name} × {item.quantity}{item.customization && item.customization.text ? <div className="muted">Custom: {item.customization.text}</div> : null}</span>
                         <span>{formatINR(item.price * item.quantity)}</span>
                       </div>
                     ))}
@@ -977,14 +491,8 @@
                         <div className="order-name">{order.customer.fullName}</div>
                         <span className={`order-status ${order.status}`}>{order.status}</span>
                       </div>
-                      <div className="order-meta">
-                        <span>{order.customer.email}</span>
-                        <span>{new Date(order.createdAt).toLocaleDateString('en-IN')}</span>
-                      </div>
-                      <div className="order-meta" style={{ marginTop: 8 }}>
-                        <span>{order.items.length} item(s)</span>
-                        <strong>{formatINR(order.total)}</strong>
-                      </div>
+                      <div className="order-meta"><span>{order.customer.email}</span><span>{new Date(order.createdAt).toLocaleDateString('en-IN')}</span></div>
+                      <div className="order-meta" style={{ marginTop: 8 }}><span>{order.items.length} item(s)</span><strong>{formatINR(order.total)}</strong></div>
                     </div>
                   ))}
                 </div>
@@ -1000,9 +508,7 @@
             {view === 'cart' && renderCart()}
             {view === 'checkout' && renderCheckout()}
             {view === 'seller' && renderSeller()}
-            {view === 'sellerOrders' && renderSeller()}
-
-            {view !== 'seller' && view !== 'sellerOrders' && (
+            {view !== 'seller' && (
               <div style={{ textAlign: 'center', marginTop: 30 }}>
                 <button className="ghost-btn" onClick={() => setView('seller')}>Seller ledger</button>
                 <span style={{ margin: '0 10px', color: '#a8997e' }}>·</span>
@@ -1013,7 +519,13 @@
         );
       }
 
-      ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+      const rootElement = document.getElementById('root');
+      if (ReactDOM.createRoot) {
+        const root = ReactDOM.createRoot(rootElement);
+        root.render(React.createElement(App));
+      } else {
+        ReactDOM.render(React.createElement(App), rootElement);
+      }
     </script>
   </body>
 </html>
