@@ -681,14 +681,7 @@ const PRODUCTS = [
         <div className="panel cart-panel">
           <button className="close" onClick={onBack}>←</button>
           <h2 className="section-title">Your cart</h2>
-          try {
-  await saveOrder(order);
-  await saveSharedCart([]);
-  onComplete(order);
-} catch (error) {
-  setError('Could not submit the order. Please try again.');
-  console.error(error);
-}
+         
           {!cart.length ? (
             <div className="empty">Your cart is empty.<br />Choose something lovely from the shop.</div>
           ) : (
