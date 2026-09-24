@@ -954,6 +954,12 @@ useEffect(() => {
   }
 }, [cart]);
 
+useEffect(() => {
+  if (cart) {
+    saveSharedCart(cart);
+  }
+}, [cart]);
+
       function addToCart(item) {
         const key = item.id + (item.customization ? JSON.stringify(item.customization) : '');
         setCart((current) => {
