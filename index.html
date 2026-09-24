@@ -820,43 +820,92 @@ const PRODUCTS = [
     }
 
     function Seller({ onBack }) {
-      const [pin, setPin] = useState('');
-      const [unlocked, setUnlocked] = useState(false);
-      const [orders, setOrders] = useState([]);
-      
-      useEffect(() => {  
-        async function loadSellerOrders() {
-          const data = await loadOrders();
-          setOrders(data);
-        }
-        if (unlocked) loadSellerOrders();
-      }, [unlocked]);
+  const [pin, setPin] = useState('');
+  const [unlocked, setUnlocked] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-      if (!unlocked) {
-        return (
-          <div className="panel detail-panel">
-            <button className="close" onClick={onBack}>←</button>
-            <div className="detail">
-              <div style={{ fontSize: 42 }}>🔒</div>
-              <h2 className="detail-name">Seller ledger</h2>
-              <p className="blurb">Enter your code to see checkout orders.</p>
-              <div className="form">
-                <input
-                  className="input"
-                  type="password"
-                  inputMode="numeric"
-                  placeholder="Seller PIN"
-                  value={pin}
-                  onChange={(e) => setPin(e.target.value)}
-                />
-                <button className="stamp-btn" onClick={() => pin === SELLER_PIN && setUnlocked(true)}>
-                  Unlock
-                </button>
-              </div>
-            </div>
-          </div>
-        );
+  useEffect(() => {
+    if (!unlocked) return;
+
+    let ignore = false;
+
+    async function loadSellerOrders() {
+      setLoading(true);
+      const data = await loadOrders();
+      if (!ignore) {
+        setOrders(data);
+        setLoading(false);
       }
+    }
+
+    loadSellerOrders();
+
+    return () => {
+      ignore = true;
+    };
+  }, [unlocked]);
+
+  if (!unlocked) {
+    return (
+      <div className="panel detail-panel">
+        <button className="close" onClick={onBack}>←</button>
+        <div className="detail">
+          <div style={{ fontSize: 42 }}>🔒</div>
+          <h2 className="detail-name">Seller ledger</h2>
+          <p className="blurb">Enter your code to see checkout orders.</p>
+          <div className="form">
+            <input
+              className="input"
+              type="password"
+              inputMode="numeric"
+              placeholder="Seller PIN"
+              value={pin}
+              onChange={(e) => setPin(e.target.value)}
+            />
+            <button className="stamp-btn" onClick={() => pin === SELLER_PIN && setUnlocked(true)}>
+              Unlock
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="panel cart-panel">
+      <button className="close" onClick={onBack}>←</button>
+      <h2 className="section-title">Seller ledger</h2>
+
+      <div className="order-list">
+        {loading ? (
+          <div className="empty">Loading orders...</div>
+        ) : !orders.length ? (
+          <div className="empty">No orders yet.</div>
+        ) : (
+          orders.map((o) => (
+            <div className="order-card" key={o.id}>
+              <strong>{o.id} · {o.customer_name}</strong>
+              <div>{o.customer_email} · {o.customer_phone}</div>
+              <div>{o.customer_address}</div>
+
+              <div style={{ marginTop: 7 }}>
+                {(Array.isArray(o.items) ? o.items : []).map((itm, idx) => (
+                  <div key={idx}>
+                    {itm.quantity} × {itm.name}
+                    {itm.customization && ` — ${itm.customization.details}`}
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ marginTop: 7, fontWeight: 600 }}>{money(o.total)}</div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
 
       return (
         <div className="panel cart-panel">
