@@ -488,7 +488,72 @@
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script type="text/babel">
+  const SUPABASE_URL = 'https://hjatelkxnmjniyqmvmko.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_TWJ8-ttwAJoCvTivrUxHUQ_Rx15AaUW';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  async function loadSharedCart() {
+    const { data, error } = await supabase
+      .from('shared_cart')
+      .select('items')
+      .eq('id', 'main-cart')
+      .maybeSingle();
+
+    if (error) {
+      console.error('loadSharedCart error:', error);
+      return [];
+    }
+
+    return data?.items || [];
+  }
+
+  async function saveSharedCart(items) {
+    const { error } = await supabase
+      .from('shared_cart')
+      .upsert({
+        id: 'main-cart',
+        items,
+        updated_at: new Date().toISOString()
+      });
+
+    if (error) {
+      console.error('saveSharedCart error:', error);
+    }
+  }
+
+  async function saveOrder(order) {
+    const { error } = await supabase.from('orders').insert({
+      customer_name: order.customer.fullName,
+      customer_email: order.customer.email,
+      customer_phone: order.customer.phone,
+      customer_address: order.customer.address,
+      items: order.items,
+      total: order.total
+    });
+
+    if (error) {
+      console.error('saveOrder error:', error);
+      throw error;
+    }
+  }
+
+  async function loadOrders() {
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('loadOrders error:', error);
+      return [];
+    }
+
+    return data || [];
+  }
+</script>
   <script type="text/babel">
     const { useState, useEffect } = React;
 
