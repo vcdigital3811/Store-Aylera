@@ -1,41 +1,920 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>AYLERA</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
-html,body,#root{margin:0;min-height:100%;}*{box-sizing:border-box}.ledger-app{--ink:#1f3327;--ink-2:#16241c;--paper:#f6efdd;--paper-2:#ece1c4;--brass:#c89b3c;--rust:#b5482a;--charcoal:#2a2420;--sage:#7a9c80;font-family:'Work Sans',sans-serif;background:radial-gradient(ellipse at top,var(--ink),var(--ink-2));color:var(--paper);min-height:100vh;padding:28px 18px 60px}.ledger-app button,.ledger-app input,.ledger-app textarea{font:inherit}.shop-header{text-align:center;margin-bottom:30px;position:relative}.shop-title{font-family:Fraunces,serif;font-size:34px;letter-spacing:.06em;margin:0}.shop-title:after{content:'';display:block;width:64px;height:2px;background:var(--brass);margin:10px auto}.shop-tagline,.profile-row,.code{font:11px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--sage)}.profile-row{margin-top:12px}.profile-row button,.link-btn{background:none;border:0;color:var(--sage);text-decoration:underline;cursor:pointer;font-size:11px;margin-left:6px}.top-actions{position:absolute;right:0;top:0;display:flex;gap:8px}.top-btn{background:none;border:1px solid var(--brass);color:var(--brass);border-radius:20px;padding:7px 12px;cursor:pointer;font:11px 'IBM Plex Mono',monospace}.top-btn:hover{background:var(--brass);color:var(--ink-2)}.cart-count{display:inline-flex;background:var(--rust);color:var(--paper);border-radius:50%;min-width:18px;height:18px;align-items:center;justify-content:center;margin-left:4px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:22px;max-width:720px;margin:auto}.tag-card{position:relative;background:var(--paper);border:0;border-radius:3px;padding:22px 14px 16px;cursor:pointer;box-shadow:3px 4px 0 #0004;transform:rotate(var(--tilt));transition:.18s;text-align:center;color:var(--charcoal)}.tag-card:hover{transform:rotate(0) translateY(-4px);box-shadow:4px 7px 0 #0005}.tag-hole{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:var(--ink-2);border:2px solid var(--brass)}.tag-code{position:absolute;top:10px;right:10px;font:9px 'IBM Plex Mono',monospace;color:var(--rust)}.tag-emoji{display:block;font-size:42px;margin:12px 0}.tag-name{display:block;font:600 15px Fraunces,serif;margin-bottom:4px}.tag-price{font:13px 'IBM Plex Mono',monospace;color:var(--ink)}.panel{max-width:560px;margin:0 auto;background:var(--paper);color:var(--charcoal);border-radius:8px;box-shadow:0 10px 30px #0006;overflow:hidden;min-height:420px}.detail-panel,.checkout-panel,.cart-panel{padding:22px;position:relative}.close{position:absolute;top:14px;left:14px;background:none;border:0;cursor:pointer;font-size:22px;color:var(--charcoal)}.detail{text-align:center}.detail .emoji{font-size:72px;margin:25px 0 8px}.detail-name{font:600 27px Fraunces,serif;margin:0 0 5px}.detail-price{font:17px 'IBM Plex Mono',monospace;color:var(--ink);margin-bottom:12px}.blurb{line-height:1.5;color:#4a4238;margin-bottom:20px}.form{display:flex;flex-direction:column;gap:10px;text-align:left}.label{font:11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.06em;color:var(--sage)}.input,.textarea{font-size:14px;padding:11px 12px;border:1.5px solid #d8cba9;border-radius:5px;background:#fffdf7;color:var(--charcoal);width:100%}.textarea{min-height:90px;resize:vertical}.input:focus,.textarea:focus{outline:0;border-color:var(--brass)}.stamp-btn{font:13px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.05em;color:var(--rust);background:transparent;border:2px solid var(--rust);border-radius:5px;padding:11px 16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}.stamp-btn:hover:not(:disabled){background:var(--rust);color:var(--paper)}.stamp-btn:disabled{opacity:.5;cursor:not-allowed}.section-title{font:600 24px Fraunces,serif;text-align:center;margin:8px 0 20px}.cart-row{display:flex;align-items:center;gap:12px;border-bottom:1px solid #e2d6b3;padding:12px 0}.cart-row .emoji{font-size:32px}.cart-info{flex:1}.cart-name{font-weight:600}.cart-meta{font:11px 'IBM Plex Mono',monospace;color:#7a6e57;margin-top:4px}.qty{display:flex;align-items:center;gap:8px}.qty button{border:1px solid #c7b990;background:none;border-radius:4px;width:26px;height:26px;cursor:pointer}.remove{background:none;border:0;color:var(--rust);cursor:pointer;font-size:18px}.total{display:flex;justify-content:space-between;font:600 16px 'IBM Plex Mono',monospace;padding:16px 0}.empty{text-align:center;color:#8a7d63;padding:50px 15px}.checkout-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.checkout-grid .full{grid-column:1/-1}.summary{background:#fffdf7;border:1px solid #e2d6b3;border-radius:5px;padding:12px;margin-bottom:14px;font-size:13px}.success{text-align:center;padding:55px 20px}.success h2{font:600 28px Fraunces,serif;color:var(--ink)}.order-list{max-height:420px;overflow:auto}.order-card{border-bottom:1px solid #e2d6b3;padding:14px 18px}.order-card strong{color:var(--ink)}.footer-row{text-align:center;margin-top:36px}.seller-link{background:none;border:0;color:var(--sage);font:11px 'IBM Plex Mono',monospace;cursor:pointer}.seller-link:hover{color:var(--brass)}@media(max-width:560px){.top-actions{position:static;justify-content:center;margin-bottom:18px}.checkout-grid{grid-template-columns:1fr}.checkout-grid .full{grid-column:auto}.grid{gap:14px}.panel{width:100%}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AYLERA</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+    html, body, #root { margin: 0; min-height: 100%; }
+    * { box-sizing: border-box; }
+
+    .ledger-app {
+      --ink: #1f3327;
+      --ink-2: #16241c;
+      --paper: #f6efdd;
+      --paper-2: #ece1c4;
+      --brass: #c89b3c;
+      --rust: #b5482a;
+      --charcoal: #2a2420;
+      --sage: #7a9c80;
+      font-family: 'Work Sans', sans-serif;
+      background: radial-gradient(ellipse at top, var(--ink), var(--ink-2));
+      color: var(--paper);
+      min-height: 100vh;
+      padding: 28px 18px 60px;
+    }
+
+    .shop-header {
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .shop-title {
+      font-family: 'Fraunces', serif;
+      font-size: 34px;
+      letter-spacing: 0.06em;
+      margin: 0;
+      color: var(--paper);
+    }
+
+    .shop-title::after {
+      content: '';
+      display: block;
+      width: 64px;
+      height: 2px;
+      background: var(--brass);
+      margin: 10px auto 0;
+    }
+
+    .shop-tagline {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-top: 10px;
+    }
+
+    .top-actions {
+      position: absolute;
+      right: 0;
+      top: 0;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .top-btn {
+      background: none;
+      border: 1px solid var(--brass);
+      color: var(--brass);
+      border-radius: 20px;
+      padding: 7px 12px;
+      cursor: pointer;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .cart-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 18px;
+      min-height: 18px;
+      border-radius: 50%;
+      background: var(--rust);
+      color: var(--paper);
+      font-size: 10px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 22px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .tag-card {
+      position: relative;
+      background: var(--paper);
+      border: none;
+      border-radius: 3px;
+      padding: 22px 14px 16px;
+      cursor: pointer;
+      box-shadow: 3px 4px 0 rgba(0,0,0,0.25);
+      transform: rotate(var(--tilt));
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      text-align: center;
+      color: var(--charcoal);
+    }
+
+    .tag-card:hover {
+      transform: rotate(0deg) translateY(-4px);
+      box-shadow: 4px 7px 0 rgba(0,0,0,0.3);
+    }
+
+    .tag-hole {
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--ink-2);
+      border: 2px solid var(--brass);
+    }
+
+    .tag-code {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--rust);
+    }
+
+    .tag-image {
+      width: 72px;
+      height: 72px;
+      object-fit: cover;
+      display: block;
+      border-radius: 6px;
+      margin: 12px auto 8px;
+      border: 1px solid rgba(42,36,32,0.14);
+    }
+
+    .tag-emoji {
+      display: block;
+      font-size: 34px;
+      margin: 14px 0 8px;
+    }
+
+    .tag-name {
+      display: block;
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--charcoal);
+      margin-bottom: 4px;
+    }
+
+    .tag-price {
+      display: block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      color: var(--ink);
+    }
+
+    .panel {
+      max-width: 560px;
+      margin: 0 auto;
+      background: var(--paper);
+      color: var(--charcoal);
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .detail-panel, .checkout-panel, .cart-panel {
+      padding: 22px;
+      position: relative;
+    }
+
+    .close {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--charcoal);
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .detail {
+      text-align: center;
+    }
+
+    .detail-image {
+      width: 160px;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin: 18px auto 10px;
+      border: 1px solid rgba(42,36,32,0.15);
+      display: block;
+    }
+
+    .detail-emoji {
+      font-size: 72px;
+      margin: 18px 0 8px;
+    }
+
+    .detail-code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--rust);
+    }
+
+    .detail-name {
+      font-family: 'Fraunces', serif;
+      font-size: 27px;
+      margin: 8px 0 5px;
+    }
+
+    .detail-price {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 17px;
+      color: var(--ink);
+      margin-bottom: 12px;
+    }
+
+    .blurb {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #4a4238;
+      margin: 0 0 20px;
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: left;
+    }
+
+    .label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--sage);
+      margin-bottom: 2px;
+    }
+
+    .input, .textarea {
+      width: 100%;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 14px;
+      padding: 11px 12px;
+      border: 1.5px solid #d8cba9;
+      border-radius: 5px;
+      background: #fffdf7;
+      color: var(--charcoal);
+    }
+
+    .textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .input:focus, .textarea:focus {
+      outline: none;
+      border-color: var(--brass);
+    }
+
+    .stamp-btn {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--rust);
+      background: transparent;
+      border: 2px solid var(--rust);
+      border-radius: 5px;
+      padding: 10px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .stamp-btn:hover:not(:disabled) {
+      background: var(--rust);
+      color: var(--paper);
+    }
+
+    .stamp-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .section-title {
+      font-family: 'Fraunces', serif;
+      font-size: 28px;
+      text-align: center;
+      margin: 10px 0 18px;
+    }
+
+    .cart-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid #e2d6b3;
+      padding: 12px 0;
+    }
+
+    .cart-row .emoji {
+      font-size: 32px;
+      width: 44px;
+      text-align: center;
+    }
+
+    .cart-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .cart-name {
+      font-weight: 600;
+      color: var(--charcoal);
+    }
+
+    .cart-meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: #7a6e57;
+      margin-top: 4px;
+      line-height: 1.45;
+    }
+
+    .qty {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--charcoal);
+      margin-right: 10px;
+    }
+
+    .qty button {
+      width: 26px;
+      height: 26px;
+      border-radius: 4px;
+      border: 1px solid #c7b990;
+      background: none;
+      cursor: pointer;
+      color: var(--charcoal);
+    }
+
+    .remove {
+      background: none;
+      border: none;
+      color: var(--rust);
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 600;
+      padding: 18px 0;
+      color: var(--charcoal);
+    }
+
+    .empty {
+      text-align: center;
+      color: #8a7d63;
+      padding: 40px 18px 30px;
+      line-height: 1.6;
+    }
+
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .summary {
+      background: #fffdf7;
+      border: 1px solid #e2d6b3;
+      border-radius: 5px;
+      padding: 12px;
+      margin-bottom: 14px;
+      color: var(--charcoal);
+      font-size: 13px;
+    }
+
+    .success {
+      text-align: center;
+      padding: 56px 22px;
+    }
+
+    .success h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 30px;
+      margin: 12px 0 10px;
+      color: var(--ink);
+    }
+
+    .success p {
+      color: #4a4238;
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+
+    .order-list {
+      max-height: 420px;
+      overflow: auto;
+    }
+
+    .order-card {
+      border-bottom: 1px solid #e2d6b3;
+      padding: 14px 18px;
+      color: var(--charcoal);
+      line-height: 1.5;
+    }
+
+    .order-card strong {
+      color: var(--ink);
+    }
+
+    .seller-link {
+      background: none;
+      border: none;
+      color: var(--sage);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .footer-row {
+      text-align: center;
+      margin-top: 36px;
+      color: var(--sage);
+    }
+
+    @media (max-width: 600px) {
+      .top-actions {
+        position: static;
+        justify-content: center;
+        margin-bottom: 18px;
+      }
+      .checkout-grid {
+        grid-template-columns: 1fr;
+      }
+      .full {
+        grid-column: auto;
+      }
+    }
+  </style>
 </head>
-<body><div id="root"></div>
-<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script><script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script><script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<script type="text/babel">
-const {useState,useEffect}=React;
-const SHOP_NAME='AYLERA', SHOP_TAGLINE='five things, made with care', SELLER_PIN='2109', CONTACT_EMAIL='amayrashah22.in@gmail.com';
-const CUSTOMIZABLE_PRODUCT_IDS=['bookmarks','trinket-tray'];
-const PRODUCTS=[
-{id:'travel-book',code:'001',emoji:'📚',name:'Travel Book',price:450,blurb:'A thoughtful companion for every journey.'},
-{id:'art-works',code:'002',emoji:'🎨',name:'Art Works',price:650,blurb:'Small pieces made to brighten your space.'},
-{id:'rush-it',code:'003',emoji:'🎲',name:'Rush It',price:350,blurb:'A little fun, made with care.'},
-{id:'chocolate',code:'004',emoji:'🍫',name:'Chocolate',price:250,blurb:'A sweet treat for yourself or someone special.'},
-{id:'lip-balms',code:'005',emoji:'💄',name:'Lip Balms',price:180,blurb:'Everyday care in a pocket-sized package.'},
-{id:'bookmarks',code:'006',emoji:'🔖',name:'Custom Bookmark',price:220,blurb:'Personalize it with a name and your own details.'},
-{id:'clean-spray',code:'007',emoji:'🧴',name:'Clean Spray',price:300,blurb:'A useful handmade essential.'},
-{id:'flower-perfume',code:'008',emoji:'🌸',name:'Flower Perfume',price:550,blurb:'A delicate floral scent.'},
-{id:'bracelets',code:'009',emoji:'📿',name:'Bracelets',price:400,blurb:'A simple accessory with personality.'},
-{id:'trinket-tray',code:'010',emoji:'🧡',name:'Custom Trinket Tray',price:500,blurb:'A special tray made to your requirements.'}
-];
-const money=n=>'₹'+Number(n).toLocaleString('en-IN');
-const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))||fallback}catch(e){return fallback}};
-const write=(key,val)=>localStorage.setItem(key,JSON.stringify(val));
-function ProductCard({product,index,onClick}){return <button className="tag-card" style={{'--tilt':((index%3)-1)*.7+'deg'}} onClick={onClick}><span className="tag-hole"/><span className="tag-code">NO. {product.code}</span><span className="tag-emoji">{product.emoji}</span><span className="tag-name">{product.name}</span><span className="tag-price">{money(product.price)}</span></button>}
-function ProductDetail({product,onBack,onAdd}){const customizable=CUSTOMIZABLE_PRODUCT_IDS.includes(product.id);const [custom,setCustom]=useState({name:'',details:''});const [error,setError]=useState('');function add(){if(customizable&&(!custom.name.trim()||!custom.details.trim())){setError('Please provide all customization details before adding this item.');return}onAdd({...product,customization:customizable?{...custom}:null});}return <div className="panel detail-panel"><button className="close" onClick={onBack}>←</button><div className="detail"><div className="emoji">{product.emoji}</div><div className="code">NO. {product.code}</div><h2 className="detail-name">{product.name}</h2><div className="detail-price">{money(product.price)}</div><p className="blurb">{product.blurb}</p></div><div className="form">{customizable&&<><div className="label">Customization details (required)</div><input className="input" placeholder="Name, text, color, size, etc." value={custom.name} onChange={e=>setCustom({...custom,name:e.target.value})}/><textarea className="textarea" placeholder="Tell us exactly how you want this product customized" value={custom.details} onChange={e=>setCustom({...custom,details:e.target.value})}/></>} {error&&<div style={{color:'var(--rust)',fontSize:12}}>{error}</div>}<button className="stamp-btn" onClick={add}>{customizable?'✎ Customize and add to cart':'＋ Add to cart'}</button></div></div>}
-function Cart({cart,onBack,onChange,onCheckout}){const total=cart.reduce((s,i)=>s+i.price*i.quantity,0);return <div className="panel cart-panel"><button className="close" onClick={onBack}>←</button><h2 className="section-title">Your cart</h2>{!cart.length?<div className="empty">Your cart is empty.<br/>Choose something lovely from the shop.</div>:<><div>{cart.map(i=><div className="cart-row" key={i.key}><span className="emoji">{i.emoji}</span><div className="cart-info"><div className="cart-name">{i.name}</div><div className="cart-meta">{i.customization?`Customized: ${i.customization.name} — ${i.customization.details}`:money(i.price)}</div></div><div className="qty"><button onClick={()=>onChange(i.key,-1)}>−</button><span>{i.quantity}</span><button onClick={()=>onChange(i.key,1)}>＋</button></div><button className="remove" onClick={()=>onChange(i.key,-i.quantity)} aria-label="Remove">×</button></div>)}</div><div className="total"><span>Total</span><span>{money(total)}</span></div><button className="stamp-btn" onClick={onCheckout}>Proceed to checkout</button></>}</div>}
-function Checkout({cart,onBack,onComplete}){const [form,setForm]=useState({fullName:'',email:'',phone:'',address:''});const [error,setError]=useState('');const total=cart.reduce((s,i)=>s+i.price*i.quantity,0);function submit(e){e.preventDefault();if(!form.fullName.trim()||!form.email.trim()||!form.phone.trim()||!form.address.trim()){setError('Please complete your full name, email, phone number, and address.');return}if(!/^\S+@\S+\.\S+$/.test(form.email)){setError('Please enter a valid email address.');return}const order={id:'AY-'+Date.now().toString().slice(-7),items:cart,customer:form,total,createdAt:Date.now()};const orders=read('aylera-orders',[]);write('aylera-orders',[order,...orders]);write('aylera-cart',[]);onComplete(order)}return <div className="panel checkout-panel"><button className="close" onClick={onBack}>←</button><h2 className="section-title">Checkout</h2><div className="summary">{cart.map(i=><div key={i.key}>{i.quantity} × {i.name} — {money(i.price*i.quantity)}</div>)}<div className="total" style={{paddingBottom:0}}><span>Total</span><span>{money(total)}</span></div></div><form className="form" onSubmit={submit}><div className="checkout-grid"><div className="full label">Delivery and contact details</div><input className="input" placeholder="Full name *" value={form.fullName} onChange={e=>setForm({...form,fullName:e.target.value})}/><input className="input" type="email" placeholder="Email address *" value={form.email} onChange={e=>setForm({...form,email:e.target.value})}/><input className="input" type="tel" placeholder="Phone number *" value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})}/><textarea className="textarea full" placeholder="Full delivery address *" value={form.address} onChange={e=>setForm({...form,address:e.target.value})}/></div>{error&&<div style={{color:'var(--rust)',fontSize:12}}>{error}</div>}<button className="stamp-btn" type="submit">Place order · {money(total)}</button></form></div>}
-function Success({order,onHome}){return <div className="panel success"><div style={{fontSize:48}}>✓</div><h2>Order received</h2><p>Thank you, {order.customer.fullName}. Your order <strong>{order.id}</strong> has been sent to the seller.</p><p>We will contact you at {order.customer.email} or {order.customer.phone} about the next steps.</p><button className="stamp-btn" onClick={onHome}>Back to shop</button></div>}
-function Seller({onBack}){const [pin,setPin]=useState('');const [unlocked,setUnlocked]=useState(false);const orders=read('aylera-orders',[]);if(!unlocked)return <div className="panel detail-panel"><button className="close" onClick={onBack}>←</button><div className="detail"><div style={{fontSize:42}}>🔒</div><h2 className="detail-name">Seller ledger</h2><p className="blurb">Enter your code to see checkout orders.</p><div className="form"><input className="input" type="password" inputMode="numeric" placeholder="Seller PIN" value={pin} onChange={e=>setPin(e.target.value)}/><button className="stamp-btn" onClick={()=>pin===SELLER_PIN&&setUnlocked(true)}>Unlock</button></div></div></div>;return <div className="panel cart-panel"><button className="close" onClick={onBack}>←</button><h2 className="section-title">Seller ledger</h2><div className="order-list">{!orders.length?<div className="empty">No orders yet.</div>:orders.map(o=><div className="order-card" key={o.id}><strong>{o.id} · {o.customer.fullName}</strong><div>{o.customer.email} · {o.customer.phone}</div><div>{o.customer.address}</div><div style={{marginTop:7}}>{o.items.map(i=><div key={i.key}>{i.quantity} × {i.name}{i.customization&&` — ${i.customization.details}`}</div>)}</div><div style={{marginTop:7,fontWeight:600}}>{money(o.total)}</div></div>)}</div></div>}
-function App(){const [view,setView]=useState('shop');const [selected,setSelected]=useState(null);const [cart,setCart]=useState(()=>read('aylera-cart',[]));const [lastOrder,setLastOrder]=useState(null);useEffect(()=>write('aylera-cart',cart),[cart]);function add(item){const key=item.id+(item.customization?JSON.stringify(item.customization):'');setCart(c=>{const found=c.find(i=>i.key===key);return found?c.map(i=>i.key===key?{...i,quantity:i.quantity+1}:i):[...c,{...item,key,quantity:1}]});setView('cart')}function change(key,delta){setCart(c=>c.map(i=>i.key===key?{...i,quantity:i.quantity+delta}:i).filter(i=>i.quantity>0))}return <div className="ledger-app">{view==='shop'&&<><header className="shop-header"><div className="top-actions"><button className="top-btn" onClick={()=>setView('cart')}>Cart <span className="cart-count">{cart.reduce((s,i)=>s+i.quantity,0)}</span></button></div><h1 className="shop-title">{SHOP_NAME}</h1><div className="shop-tagline">{SHOP_TAGLINE}</div></header><div className="grid">{PRODUCTS.map((p,i)=><ProductCard key={p.id} product={p} index={i} onClick={()=>{setSelected(p);setView('product')}}/>)}</div><div className="footer-row"><button className="seller-link" onClick={()=>setView('seller')}>🔒 Seller ledger</button> · <a className="seller-link" href={'mailto:'+CONTACT_EMAIL}>Mail us</a></div></>}{view==='product'&&<ProductDetail product={selected} onBack={()=>setView('shop')} onAdd={add}/>} {view==='cart'&&<Cart cart={cart} onBack={()=>setView('shop')} onChange={change} onCheckout={()=>setView('checkout')}/>} {view==='checkout'&&<Checkout cart={cart} onBack={()=>setView('cart')} onComplete={o=>{setLastOrder(o);setView('success')}}/>} {view==='success'&&lastOrder&&<Success order={lastOrder} onHome={()=>setView('shop')}/>} {view==='seller'&&<Seller onBack={()=>setView('shop')}/>}</div>}
-ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
-</script></body></html>
+<body>
+  <div id="root"></div>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const SHOP_NAME = 'AYLERA';
+    const SHOP_TAGLINE = 'five things, made with care';
+    const SELLER_PIN = '2109';
+    const CONTACT_EMAIL = 'amayrashah22.in@gmail.com';
+    const CUSTOMIZABLE_PRODUCT_IDS = ['bookmarks', 'trinket-tray'];
+
+    const PRODUCTS = [
+      { id: 'travel-book', code: '001', emoji: '📚', name: 'Travel Book', price: 450, image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=900&q=80', blurb: 'A thoughtful companion for every journey.' },
+      { id: 'art-works', code: '002', emoji: '🎨', name: 'Art Works', price: 650, image: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=900&q=80', blurb: 'Small pieces made to brighten your space.' },
+      { id: 'rush-it', code: '003', emoji: '🎲', name: 'Rush It', price: 350, image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=900&q=80', blurb: 'A little fun, made with care.' },
+      { id: 'chocolate', code: '004', emoji: '🍫', name: 'Chocolate', price: 250, image: 'https://images.unsplash.com/photo-1511381939415-e44015466834?auto=format&fit=crop&w=900&q=80', blurb: 'A sweet treat for yourself or someone special.' },
+      { id: 'lip-balms', code: '005', emoji: '💄', name: 'Lip Balms', price: 180, image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=80', blurb: 'Everyday care in a pocket-sized package.' },
+      { id: 'bookmarks', code: '006', emoji: '🔖', name: 'Custom Bookmark', price: 220, image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80', blurb: 'Personalize it with a name and your own details.' },
+      { id: 'clean-spray', code: '007', emoji: '🧴', name: 'Clean Spray', price: 300, image: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=900&q=80', blurb: 'A useful handmade essential.' },
+      { id: 'flower-perfume', code: '008', emoji: '🌸', name: 'Flower Perfume', price: 550, image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=80', blurb: 'A delicate floral scent.' },
+      { id: 'bracelets', code: '009', emoji: '📿', name: 'Bracelets', price: 400, image: 'https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=900&q=80', blurb: 'A simple accessory with personality.' },
+      { id: 'trinket-tray', code: '010', emoji: '🧡', name: 'Custom Trinket Tray', price: 500, image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=900&q=80', blurb: 'A special tray made to your requirements.' }
+    ];
+
+    const money = (n) => '₹' + Number(n).toLocaleString('en-IN');
+
+    function read(key, fallback) {
+      try {
+        const value = localStorage.getItem(key);
+        return value ? JSON.parse(value) : fallback;
+      } catch (e) {
+        return fallback;
+      }
+    }
+
+    function write(key, value) {
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+      } catch (e) {
+        console.error('storage error', e);
+      }
+    }
+
+    function ProductCard({ product, index, onClick }) {
+      const tilt = ((index % 3) - 1) * 0.7;
+      return (
+        <button className="tag-card" style={{ '--tilt': tilt + 'deg' }} onClick={onClick}>
+          <span className="tag-hole" />
+          <span className="tag-code">NO. {product.code}</span>
+          {product.image ? (
+            <img className="tag-image" src={product.image} alt={product.name} />
+          ) : (
+            <span className="tag-emoji">{product.emoji}</span>
+          )}
+          <span className="tag-name">{product.name}</span>
+          <span className="tag-price">{money(product.price)}</span>
+        </button>
+      );
+    }
+
+    function ProductDetail({ product, onBack, onAdd }) {
+      const customizable = CUSTOMIZABLE_PRODUCT_IDS.includes(product.id);
+      const [custom, setCustom] = useState({ name: '', details: '' });
+      const [error, setError] = useState('');
+
+      function add() {
+        if (customizable && (!custom.name.trim() || !custom.details.trim())) {
+          setError('Please provide all customization details before adding this item.');
+          return;
+        }
+
+        setError('');
+        onAdd({
+          ...product,
+          customization: customizable ? { ...custom } : null
+        });
+      }
+
+      return (
+        <div className="panel detail-panel">
+          <button className="close" onClick={onBack}>←</button>
+          <div className="detail">
+            {product.image ? (
+              <img className="detail-image" src={product.image} alt={product.name} />
+            ) : (
+              <div className="detail-emoji">{product.emoji}</div>
+            )}
+            <div className="detail-code">NO. {product.code}</div>
+            <h2 className="detail-name">{product.name}</h2>
+            <div className="detail-price">{money(product.price)}</div>
+            <p className="blurb">{product.blurb}</p>
+          </div>
+
+          <div className="form">
+            {customizable && (
+              <>
+                <div className="label">Customization details (required)</div>
+                <input
+                  className="input"
+                  placeholder="Name, text, color, size, etc."
+                  value={custom.name}
+                  onChange={(e) => setCustom({ ...custom, name: e.target.value })}
+                />
+                <textarea
+                  className="textarea"
+                  placeholder="Tell us exactly how you want this product customized"
+                  value={custom.details}
+                  onChange={(e) => setCustom({ ...custom, details: e.target.value })}
+                />
+              </>
+            )}
+
+            {error && <div style={{ color: 'var(--rust)', fontSize: 12 }}>{error}</div>}
+
+            <button className="stamp-btn" onClick={add}>
+              {customizable ? '✎ Customize and add to cart' : '＋ Add to cart'}
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    function Cart({ cart, onBack, onChange, onCheckout }) {
+      const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      return (
+        <div className="panel cart-panel">
+          <button className="close" onClick={onBack}>←</button>
+          <h2 className="section-title">Your cart</h2>
+
+          {!cart.length ? (
+            <div className="empty">Your cart is empty.<br />Choose something lovely from the shop.</div>
+          ) : (
+            <>
+              {cart.map((item) => (
+                <div className="cart-row" key={item.key}>
+                  <div className="emoji">{item.image ? '🛍️' : item.emoji}</div>
+                  <div className="cart-info">
+                    <div className="cart-name">{item.name}</div>
+                    <div className="cart-meta">
+                      {item.customization
+                        ? `Customized: ${item.customization.name} — ${item.customization.details}`
+                        : money(item.price)}
+                    </div>
+                  </div>
+                  <div className="qty">
+                    <button onClick={() => onChange(item.key, -1)}>−</button>
+                    <span>{item.quantity}</span>
+                    <button onClick={() => onChange(item.key, 1)}>＋</button>
+                  </div>
+                  <button className="remove" onClick={() => onChange(item.key, -item.quantity)} aria-label="Remove">×</button>
+                </div>
+              ))}
+
+              <div className="total">
+                <span>Total</span>
+                <span>{money(total)}</span>
+              </div>
+
+              <button className="stamp-btn" onClick={onCheckout}>Proceed to checkout</button>
+            </>
+          )}
+        </div>
+      );
+    }
+
+    function Checkout({ cart, onBack, onComplete }) {
+      const [form, setForm] = useState({ fullName: '', email: '', phone: '', address: '' });
+      const [error, setError] = useState('');
+      const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      function submit(e) {
+        e.preventDefault();
+
+        if (!form.fullName.trim() || !form.email.trim() || !form.phone.trim() || !form.address.trim()) {
+          setError('Please complete your full name, email, phone number, and address.');
+          return;
+        }
+
+        if (!/^\S+@\S+\.\S+$/.test(form.email)) {
+          setError('Please enter a valid email address.');
+          return;
+        }
+
+        const order = {
+          id: 'AY-' + Date.now().toString().slice(-7),
+          items: cart,
+          customer: form,
+          total,
+          createdAt: Date.now()
+        };
+
+        const orders = read('aylera-orders', []);
+        write('aylera-orders', [order, ...orders]);
+        write('aylera-cart', []);
+        onComplete(order);
+      }
+
+      return (
+        <div className="panel checkout-panel">
+          <button className="close" onClick={onBack}>←</button>
+          <h2 className="section-title">Checkout</h2>
+
+          <div className="summary">
+            {cart.map((item) => (
+              <div key={item.key}>{item.quantity} × {item.name} — {money(item.price * item.quantity)}</div>
+            ))}
+            <div className="total" style={{ paddingBottom: 0 }}>
+              <span>Total</span>
+              <span>{money(total)}</span>
+            </div>
+          </div>
+
+          <form className="form" onSubmit={submit}>
+            <div className="checkout-grid">
+              <div className="label full">Delivery and contact details</div>
+              <input
+                className="input"
+                placeholder="Full name *"
+                value={form.fullName}
+                onChange={(e) => setForm({ ...form, fullName: e.target.value })}
+              />
+              <input
+                className="input"
+                type="email"
+                placeholder="Email address *"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+              />
+              <input
+                className="input"
+                type="tel"
+                placeholder="Phone number *"
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              />
+              <textarea
+                className="textarea full"
+                placeholder="Full delivery address *"
+                value={form.address}
+                onChange={(e) => setForm({ ...form, address: e.target.value })}
+              />
+            </div>
+
+            {error && <div style={{ color: 'var(--rust)', fontSize: 12 }}>{error}</div>}
+
+            <button className="stamp-btn" type="submit">Place order · {money(total)}</button>
+          </form>
+        </div>
+      );
+    }
+
+    function Success({ order, onHome }) {
+      return (
+        <div className="panel success">
+          <div style={{ fontSize: 48 }}>✓</div>
+          <h2>Order received</h2>
+          <p>Thank you, {order.customer.fullName}. Your order <strong>{order.id}</strong> has been sent to the seller.</p>
+          <p>We will contact you at {order.customer.email} or {order.customer.phone} about the next steps.</p>
+          <button className="stamp-btn" onClick={onHome}>Back to shop</button>
+        </div>
+      );
+    }
+
+    function Seller({ onBack }) {
+      const [pin, setPin] = useState('');
+      const [unlocked, setUnlocked] = useState(false);
+      const orders = read('aylera-orders', []);
+
+      if (!unlocked) {
+        return (
+          <div className="panel detail-panel">
+            <button className="close" onClick={onBack}>←</button>
+            <div className="detail">
+              <div style={{ fontSize: 42 }}>🔒</div>
+              <h2 className="detail-name">Seller ledger</h2>
+              <p className="blurb">Enter your code to see checkout orders.</p>
+              <div className="form">
+                <input
+                  className="input"
+                  type="password"
+                  inputMode="numeric"
+                  placeholder="Seller PIN"
+                  value={pin}
+                  onChange={(e) => setPin(e.target.value)}
+                />
+                <button className="stamp-btn" onClick={() => pin === SELLER_PIN && setUnlocked(true)}>
+                  Unlock
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      return (
+        <div className="panel cart-panel">
+          <button className="close" onClick={onBack}>←</button>
+          <h2 className="section-title">Seller ledger</h2>
+          <div className="order-list">
+            {!orders.length ? (
+              <div className="empty">No orders yet.</div>
+            ) : (
+              orders.map((o) => (
+                <div className="order-card" key={o.id}>
+                  <strong>{o.id} · {o.customer.fullName}</strong>
+                  <div>{o.customer.email} · {o.customer.phone}</div>
+                  <div>{o.customer.address}</div>
+                  <div style={{ marginTop: 7 }}>
+                    {o.items.map((itm) => (
+                      <div key={itm.key}>{itm.quantity} × {itm.name}{itm.customization && ` — ${itm.customization.details}`}</div>
+                    ))}
+                  </div>
+                  <div style={{ marginTop: 7, fontWeight: 600 }}>{money(o.total)}</div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      const [view, setView] = useState('shop');
+      const [selected, setSelected] = useState(null);
+      const [cart, setCart] = useState(() => read('aylera-cart', []));
+      const [lastOrder, setLastOrder] = useState(null);
+
+      useEffect(() => {
+        write('aylera-cart', cart);
+      }, [cart]);
+
+      function addToCart(item) {
+        const key = item.id + (item.customization ? JSON.stringify(item.customization) : '');
+        setCart((current) => {
+          const exists = current.find((entry) => entry.key === key);
+          if (exists) {
+            return current.map((entry) => entry.key === key ? { ...entry, quantity: entry.quantity + 1 } : entry);
+          }
+          return [...current, { ...item, key, quantity: 1 }];
+        });
+
+        setView('cart');
+      }
+
+      function changeQuantity(key, delta) {
+        setCart((current) =>
+          current
+            .map((item) => item.key === key ? { ...item, quantity: item.quantity + delta } : item)
+            .filter((item) => item.quantity > 0)
+        );
+      }
+
+      return (
+        <div className="ledger-app">
+          {view === 'shop' && (
+            <>
+              <header className="shop-header">
+                <div className="top-actions">
+                  <button className="top-btn" onClick={() => setView('cart')}>
+                    Cart
+                    <span className="cart-count">{cart.reduce((sum, item) => sum + item.quantity, 0)}</span>
+                  </button>
+                </div>
+                <h1 className="shop-title">{SHOP_NAME}</h1>
+                <div className="shop-tagline">{SHOP_TAGLINE}</div>
+              </header>
+
+              <div className="grid">
+                {PRODUCTS.map((product, index) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    index={index}
+                    onClick={() => {
+                      setSelected(product);
+                      setView('product');
+                    }}
+                  />
+                ))}
+              </div>
+
+              <div className="footer-row">
+                <button className="seller-link" onClick={() => setView('seller')}>🔒 Seller ledger</button>
+                <span> · </span>
+                <a className="seller-link" href={'mailto:' + CONTACT_EMAIL}>Mail us</a>
+              </div>
+            </>
+          )}
+
+          {view === 'product' && selected && (
+            <ProductDetail
+              product={selected}
+              onBack={() => setView('shop')}
+              onAdd={addToCart}
+            />
+          )}
+
+          {view === 'cart' && (
+            <Cart
+              cart={cart}
+              onBack={() => setView('shop')}
+              onChange={changeQuantity}
+              onCheckout={() => setView('checkout')}
+            />
+          )}
+
+          {view === 'checkout' && (
+            <Checkout
+              cart={cart}
+              onBack={() => setView('cart')}
+              onComplete={(order) => {
+                setLastOrder(order);
+                setView('success');
+              }}
+            />
+          )}
+
+          {view === 'success' && lastOrder && (
+            <Success order={lastOrder} onHome={() => setView('shop')} />
+          )}
+
+          {view === 'seller' && <Seller onBack={() => setView('shop')} />}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
