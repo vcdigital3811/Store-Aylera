@@ -681,7 +681,7 @@ const PRODUCTS = [
         <div className="panel cart-panel">
           <button className="close" onClick={onBack}>←</button>
           <h2 className="section-title">Your cart</h2>
-         
+
           {!cart.length ? (
             <div className="empty">Your cart is empty.<br />Choose something lovely from the shop.</div>
           ) : (
@@ -724,27 +724,31 @@ const PRODUCTS = [
       const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
       async function submit(e) {
-  e.preventDefault();
+        e.preventDefault();
+        if (!form.fullName.trim() || !form.email.trim() || !form.phone.trim() || !form.address.trim()) {
+          setError('Please complete your full name, email, phone number, and address.');
+          return;
+        }
+        if (!/^\S+@\S+\.\S+$/.test(form.email)) {
+          setError('Please enter a valid email address.');
+          return;
+        }
+        const order = {
+          id: 'AY-' + Date.now().toString().slice(-7),
+          items: cart,
+          customer: form,
+          total,
+          createdAt: Date.now()
+        };
+        try {
+          await saveOrder(order);
+          onComplete(order);
+        } catch (submitError) {
+          console.error('Order submission failed:', submitError);
+          setError('We could not place your order. Please try again.');
+        }
+      }
 
-  if (!form.fullName.trim() || !form.email.trim() || !form.phone.trim() || !form.address.trim()) {
-    setError('Please complete your full name, email, phone number, and address.');
-    return;
-  }
-
-  if (!/^\S+@\S+\.\S+$/.test(form.email)) {
-    setError('Please enter a valid email address.');
-    return;
-  }
-
-  const order = {
-    id: 'AY-' + Date.now().toString().slice(-7),
-    items: cart,
-    customer: form,
-    total,
-    createdAt: Date.now()
-  };
-
- 
       return (
         <div className="panel checkout-panel">
           <button className="close" onClick={onBack}>←</button>
@@ -899,58 +903,29 @@ const PRODUCTS = [
   );
 }
 
-      return (
-        <div className="panel cart-panel">
-          <button className="close" onClick={onBack}>←</button>
-          <h2 className="section-title">Seller ledger</h2>
-          <div className="order-list">
-            {!orders.length ? (
-              <div className="empty">No orders yet.</div>
-            ) : (
-              orders.map((o) => (
-                <div className="order-card" key={o.id}>
-                  <strong>{o.id} · {o.customer.fullName}</strong>
-                  <div>{o.customer.email} · {o.customer.phone}</div>
-                  <div>{o.customer.address}</div>
-                  <div style={{ marginTop: 7 }}>
-                    {o.items.map((itm) => (
-                      <div key={itm.key}>{itm.quantity} × {itm.name}{itm.customization && ` — ${itm.customization.details}`}</div>
-                    ))}
-                  </div>
-                  <div style={{ marginTop: 7, fontWeight: 600 }}>{money(o.total)}</div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      );
-    }
-
-    function App() {
+      function App() {
       const [view, setView] = useState('shop');
       const [selected, setSelected] = useState(null);
       const [cart, setCart] = useState([]);
       const [lastOrder, setLastOrder] = useState(null);
+      const [cartLoaded, setCartLoaded] = useState(false);
 
-useEffect(() => {
-  async function initCart() {
-    const shared = await loadSharedCart();
-    setCart(shared);
-  }
-  initCart();
-}, []);
+      useEffect(() => {
+        let mounted = true;
+        async function initCart() {
+          const shared = await loadSharedCart();
+          if (mounted) {
+            setCart(shared);
+            setCartLoaded(true);
+          }
+        }
+        initCart();
+        return () => { mounted = false; };
+      }, []);
 
-useEffect(() => {
-  if (cart) {
-    saveSharedCart(cart);
-  }
-}, [cart]);
-
-useEffect(() => {
-  if (cart) {
-    saveSharedCart(cart);
-  }
-}, [cart]);
+      useEffect(() => {
+        if (cartLoaded) saveSharedCart(cart);
+      }, [cart, cartLoaded]);
 
       function addToCart(item) {
         const key = item.id + (item.customization ? JSON.stringify(item.customization) : '');
@@ -1033,6 +1008,7 @@ useEffect(() => {
               onBack={() => setView('cart')}
               onComplete={(order) => {
                 setLastOrder(order);
+                setCart([]);
                 setView('success');
               }}
             />
